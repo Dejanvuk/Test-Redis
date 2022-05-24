@@ -37,8 +37,21 @@ public class Parser {
         messages.add(message);
     }
 
-    public void readSimpleString(List<Message> messages) {
+    public void readSimpleString(List<Message> messages) throws IOException {
+        StringBuilder sb = new StringBuilder();
 
+        char ch = (char) in.read();
+
+        while(ch != '\r') {
+            sb.append(ch);
+            ch = (char) in.read();
+        }
+        in.skip(1); // skip CLRF, only \n left to skip
+
+        Object[] data = new Object[1];
+        data[0] = sb.toString();
+        Message message = new Message.MessageBuilder().setDataType(DataType.SIMPLE_STR).setData(data).build();
+        messages.add(message);
     }
 
     //public String readBulkString() {}
@@ -59,7 +72,7 @@ public class Parser {
             case '-': // Errors
                 break;
             case ':': //  Integers
-
+                readInteger(messages);
                 break;
             case '$': // Bulk Strings
                 break;
