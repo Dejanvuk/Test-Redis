@@ -24,11 +24,18 @@ public class Parser {
     /**
      * Encodes the message back to the string format
      */
+    // TO-DO: Needs testing
     public void encodeMsg() {
 
     }
 
-    //public Integer readInteger() {}
+    public void readInteger(List<Message> messages) throws IOException {
+        int number = readInteger();
+        Object[] data = new Object[1];
+        data[0] = number;
+        Message message = new Message.MessageBuilder().setDataType(DataType.INTEGERS).setData(data).build();
+        messages.add(message);
+    }
 
     public void readSimpleString(List<Message> messages) {
 
@@ -38,7 +45,6 @@ public class Parser {
 
     public void readArray(List<Message> messages) throws IOException {
         int length = readInteger(); // read the length of the array
-        in.skip(2); // skip CLRF \r\n
         Message message = new Message.MessageBuilder().setDataType(DataType.ARRAYS).setLength(length).build();
         messages.add(message);
     }
@@ -53,6 +59,7 @@ public class Parser {
             case '-': // Errors
                 break;
             case ':': //  Integers
+
                 break;
             case '$': // Bulk Strings
                 break;
@@ -62,6 +69,7 @@ public class Parser {
         }
     }
 
+    // TO-DO: Test this method
     public int readInteger() throws IOException {
         int result = 0;
 
@@ -73,6 +81,8 @@ public class Parser {
             result += digit;
             ch = (char) in.read();
         }
+
+        in.skip(1); // skip CLRF, only \n left to skip
 
         return result;
     }
