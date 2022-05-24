@@ -1,0 +1,3 @@
+com\dejanvuk\parser\exceptions\InvalidMsgException.class
+com\dejanvuk\parser\types\MsgTypes.class
+com\dejanvuk\parser\Parser.class

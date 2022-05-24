@@ -12,10 +12,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Redis" target="1.5" />
+      <module name="Redis" target="11" />
       <module name="redis" target="11" />
       <module name="redis-parser" target="1.5" />
-      <module name="redisparser" target="1.5" />
+      <module name="redisparser" target="11" />
       <module name="test-client" target="11" />
     </bytecodeTargetLevel>
   </component>

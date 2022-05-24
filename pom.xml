@@ -7,6 +7,10 @@
     <groupId>com.dejanvuk</groupId>
     <artifactId>root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
     <packaging>pom</packaging>
 
     <modules>

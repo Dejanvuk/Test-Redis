@@ -1,5 +1,5 @@
 package com.dejanvuk.parser.types;
 
-public enum MsgTypes {
+public enum MsgType {
     GET, SET, DELETE
 }
