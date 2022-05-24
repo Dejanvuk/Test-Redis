@@ -5,7 +5,6 @@ import com.dejanvuk.parser.types.DataType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,7 +32,7 @@ public class Parser {
         int number = readInteger();
         Object[] data = new Object[1];
         data[0] = number;
-        Message message = new Message.MessageBuilder().setDataType(DataType.INTEGERS).setData(data).build();
+        Message message = new Message.MessageBuilder().setDataType(DataType.INTEGER).setData(data).build();
         messages.add(message);
     }
 
@@ -54,6 +53,28 @@ public class Parser {
         messages.add(message);
     }
 
+    /**
+     * Clients won't really send errors but whatever, usually only the server would send the client such a message
+     * @param messages
+     * @throws IOException
+     */
+    public void readError(List<Message> messages) throws IOException {
+        StringBuilder sb = new StringBuilder();
+
+        char ch = (char) in.read();
+
+        while(ch != '\r') {
+            sb.append(ch);
+            ch = (char) in.read();
+        }
+        in.skip(1); // skip CLRF, only \n left to skip
+
+        Object[] data = new Object[1];
+        data[0] = sb.toString();
+        Message message = new Message.MessageBuilder().setDataType(DataType.ERROR).setData(data).build();
+        messages.add(message);
+    }
+
     public void readBulkString(List<Message> messages) throws IOException{
         int length = readInteger(); // read the length of the bulk string
         char[] str = new char[length];
@@ -71,7 +92,7 @@ public class Parser {
 
     public void readArray(List<Message> messages) throws IOException {
         int length = readInteger(); // read the length of the array
-        Message message = new Message.MessageBuilder().setDataType(DataType.ARRAYS).setLength(length).build();
+        Message message = new Message.MessageBuilder().setDataType(DataType.ARRAY).setLength(length).build();
         messages.add(message);
     }
 
@@ -83,6 +104,7 @@ public class Parser {
                 readSimpleString(messages);
                 break;
             case '-': // Errors
+                readError(messages);
                 break;
             case ':': //  Integers
                 readInteger(messages);
