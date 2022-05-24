@@ -54,7 +54,20 @@ public class Parser {
         messages.add(message);
     }
 
-    //public String readBulkString() {}
+    public void readBulkString(List<Message> messages) throws IOException{
+        int length = readInteger(); // read the length of the bulk string
+        char[] str = new char[length];
+
+        for(int i = 0; i < length; i++) {
+            str[i] = (char) in.read();
+        }
+        in.skip(2); // skip CLRF
+
+        Object[] data = new Object[1];
+        data[0] = String.valueOf(str);
+        Message message = new Message.MessageBuilder().setDataType(DataType.BULK_STR).setData(data).setLength(length).build();
+        messages.add(message);
+    }
 
     public void readArray(List<Message> messages) throws IOException {
         int length = readInteger(); // read the length of the array
@@ -75,6 +88,7 @@ public class Parser {
                 readInteger(messages);
                 break;
             case '$': // Bulk Strings
+                readBulkString(messages);
                 break;
             case '*': // Arrays
                 readArray(messages);
