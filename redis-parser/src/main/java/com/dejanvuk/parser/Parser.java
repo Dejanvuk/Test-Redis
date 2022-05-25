@@ -63,7 +63,6 @@ public class Parser {
      * S: +ERROR\r\n
      * S: ${nr of bytes of the string}\r\n
      * S: {exception as string}\r\n
-     * S: :123456\r\n
      */
     public String createErrorMessage() {
         StringBuilder sb = new StringBuilder();
