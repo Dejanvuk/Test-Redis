@@ -40,13 +40,13 @@ public class Parser {
     public void readSimpleString(List<Message> messages) throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        char ch = (char) in.read();
+        char ch = (char) in.readUnsignedByte();
 
         while(ch != '\r') {
             sb.append(ch);
-            ch = (char) in.read();
+            ch = (char) in.readUnsignedByte();
         }
-        in.skip(1); // skip CLRF, only \n left to skip
+        in.skipBytes(1); // skip CLRF, only \n left to skip
 
         Object[] data = new Object[1];
         data[0] = sb.toString();
@@ -62,13 +62,13 @@ public class Parser {
     public void readError(List<Message> messages) throws IOException {
         StringBuilder sb = new StringBuilder();
 
-        char ch = (char) in.read();
+        char ch = (char) in.readUnsignedByte();
 
         while(ch != '\r') {
             sb.append(ch);
-            ch = (char) in.read();
+            ch = (char) in.readUnsignedByte();
         }
-        in.skip(1); // skip CLRF, only \n left to skip
+        in.skipBytes(1); // skip CLRF, only \n left to skip
 
         Object[] data = new Object[1];
         data[0] = sb.toString();
@@ -81,9 +81,9 @@ public class Parser {
         char[] str = new char[length];
 
         for(int i = 0; i < length; i++) {
-            str[i] = (char) in.read();
+            str[i] = (char) in.readUnsignedByte();
         }
-        in.skip(2); // skip CLRF
+        in.skipBytes(2); // skip CLRF
 
         Object[] data = new Object[1];
         data[0] = String.valueOf(str);
@@ -133,16 +133,16 @@ public class Parser {
     public int readInteger() throws IOException {
         int result = 0;
 
-        char ch = (char) in.read();
+        char ch = (char) in.readUnsignedByte();
 
         while(ch != '\r') {
             int digit = ch - '0';
             result *= 10;
             result += digit;
-            ch = (char) in.read();
+            ch = (char) in.readUnsignedByte();
         }
 
-        in.skip(1); // skip CLRF, only \n left to skip
+        in.skipBytes(1); // skip CLRF, only \n left to skip
 
         return result;
     }

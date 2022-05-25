@@ -18,7 +18,7 @@ public class HandleClientThread implements Runnable{
     private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
     private DataInputStream in = null;
     private Parser parser = null;
-    Map<String, Message[]> db = new HashMap<>(); // in-memory db
+    Map<String, List<Message>> db = new HashMap<>(); // in-memory db
 
 
     public HandleClientThread(Socket socket) {
@@ -39,8 +39,41 @@ public class HandleClientThread implements Runnable{
                 List<Message> messages = new ArrayList<>();
                 // 1st: read the data
                 parser.readData(messages);
+
                 // 2nd: process the data
-                processData(messages);
+                /*
+                Note:
+                -first message is always an array
+                -second message is always a simple string with the command name in msgType
+
+                Read through-out the messages list and process the data
+                Also use a double-linked list for LRU cache functionality
+                 */
+
+                // TO-DO: Verify first and second messages to be array and simple str
+                if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.SIMPLE_STR)) {
+                    throw new InvalidMsgException();
+                }
+
+                Message message = messages.get(1);
+                MsgType msgType = message.msgType;
+
+                if(msgType == null) {
+                    throw new InvalidMsgException();
+                }
+
+                // TO-DO: The message processing methods should return a message which will then be written to the client
+                List<Message> response = null;
+                // TO-DO: Create a method which extracts the key's name
+                if(msgType == MsgType.SET) {
+                    processSetMsg(messages);
+                }
+                if(msgType == MsgType.GET) {
+                    processGetMsg(messages);
+                }
+                if(msgType == MsgType.DELETE) {
+                    processDeleteMsg(messages);
+                }
                 // 3rd: write the message back to the client
                 sendMessage();
             } catch (IOException e) {
@@ -52,27 +85,7 @@ public class HandleClientThread implements Runnable{
         }
     }
 
-    public void processData(List<Message> messages) throws InvalidMsgException{
-        /*
-        Note:
-        -first message is always an array
-        -second message is always a simple string with the command name in msgType
-
-        Read through-out the messages list and process the data
-        Also use a double-linked list for LRU cache functionality
-         */
-        // TO-DO: Verify first and second messages to be array and simple str
-        if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.SIMPLE_STR)) {
-            throw new InvalidMsgException();
-        }
-
-        Message message = messages.get(1);
-        MsgType msgType = message.msgType;
-
-        if(msgType == null) {
-            throw new InvalidMsgException();
-        }
-
+    public void processSetMsg(List<Message> messages) throws InvalidMsgException{
         /*
         example of client requests for SET("abcd", 123456)
         C: *2\r\n
@@ -82,15 +95,15 @@ public class HandleClientThread implements Runnable{
         C: abcd\r\n
         C: :123456\r\n
         */
-        if(msgType == MsgType.SET) {
-            db.put();
-        }
-        if(msgType == MsgType.GET) {
+        db.put((String)messages.get(2).data[0], messages);
+    }
 
-        }
-        if(msgType == MsgType.DELETE) {
+    public void processGetMsg(List<Message> messages) throws InvalidMsgException{
 
-        }
+    }
+
+    public void processDeleteMsg(List<Message> messages) throws InvalidMsgException{
+
     }
 
     public void sendMessage() {
