@@ -1,15 +1,25 @@
 package com.dejanvuk.parser;
 
+import com.dejanvuk.parser.exceptions.InvalidMsgException;
+import com.dejanvuk.parser.types.DataType;
+import com.dejanvuk.parser.types.MsgType;
+
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HandleClientThread implements Runnable{
     private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
-    private BufferedReader in = null;
+    private DataInputStream in = null;
     private Parser parser = null;
+    Map<String, Message[]> db = new HashMap<>(); // in-memory db
+
 
     public HandleClientThread(Socket socket) {
         this.socket = socket;
@@ -18,48 +28,70 @@ public class HandleClientThread implements Runnable{
     @Override
     public void run() {
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            in = new DataInputStream(socket.getInputStream());
             parser = new Parser(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         while(socket.isConnected()) {
-            // read the data
-            List<Message> messages = null;
-
             try {
+                List<Message> messages = new ArrayList<>();
+                // 1st: read the data
                 parser.readData(messages);
+                // 2nd: process the data
+                processData(messages);
+                // 3rd: write the message back to the client
+                sendMessage();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InvalidMsgException e) {
+                e.printStackTrace();
+                // TO-DO: Send client an error message
             }
-
-            // process it
-            processData(messages);
-            // write the message back to the client
-            sendMessage();
         }
     }
 
-    public void processData(List<Message> messages) {
+    public void processData(List<Message> messages) throws InvalidMsgException{
         /*
-        MsgType msgType = MsgType.valueOf();
+        Note:
+        -first message is always an array
+        -second message is always a simple string with the command name in msgType
 
-        switch (msgType) {
-            case SET:
-                parser.
-                break;
-            case GET:
-
-                break;
-            case DELETE:
-
-                break;
+        Read through-out the messages list and process the data
+        Also use a double-linked list for LRU cache functionality
+         */
+        // TO-DO: Verify first and second messages to be array and simple str
+        if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.SIMPLE_STR)) {
+            throw new InvalidMsgException();
         }
+
+        Message message = messages.get(1);
+        MsgType msgType = message.msgType;
+
+        if(msgType == null) {
+            throw new InvalidMsgException();
+        }
+
+        /*
+        example of client requests for SET("abcd", 123456)
+        C: *2\r\n
+        C: $3\r\n
+        C: SET\r\n
+        C: $4\r\n
+        C: abcd\r\n
+        C: :123456\r\n
         */
+        if(msgType == MsgType.SET) {
+            db.put();
+        }
+        if(msgType == MsgType.GET) {
 
+        }
+        if(msgType == MsgType.DELETE) {
+
+        }
     }
-
 
     public void sendMessage() {
     }

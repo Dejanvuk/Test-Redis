@@ -3,6 +3,7 @@ package com.dejanvuk.parser;
 import com.dejanvuk.parser.types.DataType;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -14,9 +15,9 @@ Client sends requests in an array
 Server also stores the requests in an array, even thoug there might be just one request
 * */
 public class Parser {
-    private Reader in;
+    private DataInputStream in;
 
-    Parser(BufferedReader in) {
+    Parser(DataInputStream in) {
         this.in = in;
     }
 
@@ -97,7 +98,15 @@ public class Parser {
     }
 
     public void readData(List<Message> messages) throws IOException {
-        char dataType = (char)in.read(); // read the first byte of the reply
+        int readByte = in.readUnsignedByte();
+
+        /* read() is blocking anyway if the buffer is empty
+        if(readByte == -1) { // -1 if the end of the stream has been reached
+            return;
+        }
+        */
+
+        char dataType = (char)readByte; // read the first byte of the reply
 
         switch (dataType) {
             case '+': // Simple Strings
@@ -116,6 +125,8 @@ public class Parser {
                 readArray(messages);
                 break;
         }
+
+        readData(messages);
     }
 
     // TO-DO: Test this method
