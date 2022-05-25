@@ -29,6 +29,49 @@ public class Parser {
 
     }
 
+    /**
+     * SET,DELETE messages it will send back an empty OK
+     * GET message will send back and OK alongside the encoded data as string
+     * @param data
+     * @return
+     *
+     * Empty OK         OK with data
+     * S: *1\r\n        S: *{nr of messages}\r\n
+     * S: +OK\r\n       S: +OK\r\n
+     *                  S: {data}
+     * {data} will be non-array, however later we will add support to parse complex nested arrays and data
+     * if {data} is array, get each message from the array
+     * {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string
+     */
+    public String createOkMessage(List<Message> data) {
+        StringBuilder sb = new StringBuilder();
+        // Encode the data first
+        if(data != null) {
+
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     *  The messages can throw errors during processing
+     *  Send it back to the client alongside the exception
+     * @return
+     *
+     * ERROR message with the exception
+     * S: *2\r\n
+     * S: +ERROR\r\n
+     * S: ${nr of bytes of the string}\r\n
+     * S: {exception as string}\r\n
+     * S: :123456\r\n
+     */
+    public String createErrorMessage() {
+        StringBuilder sb = new StringBuilder();
+
+        return sb.toString();
+    }
+
+
     public void readInteger(List<Message> messages) throws IOException {
         int number = readInteger();
         Object[] data = new Object[1];

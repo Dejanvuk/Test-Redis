@@ -41,6 +41,7 @@ public class HandleClientThread implements Runnable{
                 parser.readData(messages);
 
                 // 2nd: process the data
+
                 /*
                 Note:
                 -first message is always an array
@@ -50,7 +51,7 @@ public class HandleClientThread implements Runnable{
                 Also use a double-linked list for LRU cache functionality
                  */
 
-                // TO-DO: Verify first and second messages to be array and simple str
+                // TO-DO: Verify better that the first and second messages to be array and simple str
                 if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.SIMPLE_STR)) {
                     throw new InvalidMsgException();
                 }
@@ -96,14 +97,20 @@ public class HandleClientThread implements Runnable{
         C: :123456\r\n
         */
         db.put((String)messages.get(2).data[0], messages);
+
+        // send an OK message back or ERROR
     }
 
     public void processGetMsg(List<Message> messages) throws InvalidMsgException{
+        db.get((String)messages.get(2).data[0]);
 
+        // send an OK message back along with the data or ERROR
     }
 
     public void processDeleteMsg(List<Message> messages) throws InvalidMsgException{
+        db.remove((String)messages.get(2).data[0]);
 
+        // send an OK message back or ERROR
     }
 
     public void sendMessage() {
