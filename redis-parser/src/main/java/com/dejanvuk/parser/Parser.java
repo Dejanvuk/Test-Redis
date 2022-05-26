@@ -23,43 +23,36 @@ public class Parser {
     }
 
     /**
-     * Encodes the message to the string format
-     */
-    // TO-DO: Needs testing
-    public String encodeMsg(StringBuilder sb, Message message) {
-        DataType dataType = message.dataType;
-
-        StringBuilder sb = new StringBuilder();
-
-        if(dataType == DataType.SIMPLE_STR) {
-
-        }
-        else if(dataType == DataType.ERROR) {
-
-        }
-        else if(dataType == DataType.INTEGER) {
-
-        }
-        else if(dataType == DataType.BULK_STR) {
-
-        }
-        else if(dataType == DataType.ARRAY) {
-
-        }
-        else {
-            // return error
-        }
-
-    }
-
-    /**
-     * encodes the response back to the client
-     * @param sb
+     * Encodes the Message List
+     * Typically used for GET messages
      * @param messages
      * @return
      */
-    public String encodeResponse(StringBuilder sb, List<Message> messages) {
+    // TO-DO: Test this method
+    public String encodeResponse(List<Message> messages) {
+        int length = messages.size();
 
+        StringBuilder sb = new StringBuilder(length + 6);
+
+        sb.append('*' + length + 1); // 1 extra for the Ok simple string
+        sb.append('\r');
+        sb.append('\n');
+        sb.append(makeSimpleStrMessage("OK"));
+        for(int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+
+            if(message.dataType == DataType.INTEGER) {
+                sb.append(makeIntegerMessage((Integer)message.data[0]));
+            }
+            else if(message.dataType == DataType.SIMPLE_STR) {
+                sb.append(makeSimpleStrMessage((String) message.data[0]));
+            }
+            else if(message.dataType == DataType.BULK_STR) {
+                sb.append(makeBinaryMessage((String) message.data[0]));
+            }
+        }
+
+        return sb.toString();
     }
 
     public void readInteger(List<Message> messages) throws IOException {
@@ -235,8 +228,7 @@ public class Parser {
         int length = str.length();
         StringBuilder sb = new StringBuilder(length + 6);
 
-        sb.append('$');
-        sb.append(length);
+        sb.append('$' + length);
         sb.append('\r');
         sb.append('\n');
         sb.append(str);

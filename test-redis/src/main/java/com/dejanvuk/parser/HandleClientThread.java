@@ -136,10 +136,12 @@ public class HandleClientThread implements Runnable{
      * {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string
      */
     public String processGetMsg(List<Message> messages){
-        db.get((String)messages.get(2).data[0]);
+        // starting the get from 0 cause we store only the contents of the msg
+        // check the processSetMsg above
+        db.get((String)messages.get(0).data[0]);
 
         // send an OK message back along with the data
-
+        return parser.encodeResponse(messages);
     }
 
     /**
