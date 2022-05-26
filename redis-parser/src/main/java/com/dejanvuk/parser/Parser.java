@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,54 +23,44 @@ public class Parser {
     }
 
     /**
-     * Encodes the message back to the string format
+     * Encodes the message to the string format
      */
     // TO-DO: Needs testing
-    public void encodeMsg() {
+    public String encodeMsg(StringBuilder sb, Message message) {
+        DataType dataType = message.dataType;
 
-    }
-
-    /**
-     * SET,DELETE messages it will send back an empty OK
-     * GET message will send back and OK alongside the encoded data as string
-     * @param data
-     * @return
-     *
-     * Empty OK         OK with data
-     * S: *1\r\n        S: *{nr of messages}\r\n
-     * S: +OK\r\n       S: +OK\r\n
-     *                  S: {data}
-     * {data} will be non-array, however later we will add support to parse complex nested arrays and data
-     * if {data} is array, get each message from the array
-     * {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string
-     */
-    public String createOkMessage(List<Message> data) {
         StringBuilder sb = new StringBuilder();
-        // Encode the data first
-        if(data != null) {
+
+        if(dataType == DataType.SIMPLE_STR) {
 
         }
+        else if(dataType == DataType.ERROR) {
 
-        return sb.toString();
+        }
+        else if(dataType == DataType.INTEGER) {
+
+        }
+        else if(dataType == DataType.BULK_STR) {
+
+        }
+        else if(dataType == DataType.ARRAY) {
+
+        }
+        else {
+            // return error
+        }
+
     }
 
     /**
-     *  The messages can throw errors during processing
-     *  Send it back to the client alongside the exception
+     * encodes the response back to the client
+     * @param sb
+     * @param messages
      * @return
-     *
-     * ERROR message with the exception
-     * S: *2\r\n
-     * S: +ERROR\r\n
-     * S: ${nr of bytes of the string}\r\n
-     * S: {exception as string}\r\n
      */
-    public String createErrorMessage() {
-        StringBuilder sb = new StringBuilder();
+    public String encodeResponse(StringBuilder sb, List<Message> messages) {
 
-        return sb.toString();
     }
-
 
     public void readInteger(List<Message> messages) throws IOException {
         int number = readInteger();
@@ -166,6 +157,9 @@ public class Parser {
             case '*': // Arrays
                 readArray(messages);
                 break;
+            default:
+                // invalid data type; return error
+
         }
 
         readData(messages);
@@ -187,5 +181,68 @@ public class Parser {
         in.skipBytes(1); // skip CLRF, only \n left to skip
 
         return result;
+    }
+
+    /* ====================
+    Methods to convert the message to string
+    ====================
+    */
+    public String makeIntegerMessage(int nr) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(':');
+        sb.append(nr);
+        sb.append('\r');
+        sb.append('\n');
+
+        return sb.toString();
+    }
+
+    public String makeSimpleStrMessage(String str) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append('+');
+        sb.append(str);
+        sb.append('\r');
+        sb.append('\n');
+
+        return sb.toString();
+    }
+
+    public String makeErrorMessage(String exception) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append('-');
+        sb.append(exception);
+        sb.append('\r');
+        sb.append('\n');
+
+        return sb.toString();
+    }
+
+    public String makeNullMessage() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append('-');
+        sb.append(1);
+        sb.append('\r');
+        sb.append('\n');
+
+        return sb.toString();
+    }
+
+    public String makeBinaryMessage(String str) {
+        int length = str.length();
+        StringBuilder sb = new StringBuilder(length + 6);
+
+        sb.append('$');
+        sb.append(length);
+        sb.append('\r');
+        sb.append('\n');
+        sb.append(str);
+        sb.append('\r');
+        sb.append('\n');
+
+        return sb.toString();
     }
 }

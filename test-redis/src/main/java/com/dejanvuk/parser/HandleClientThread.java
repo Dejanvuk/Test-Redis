@@ -4,10 +4,8 @@ import com.dejanvuk.parser.exceptions.InvalidMsgException;
 import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,31 +50,43 @@ public class HandleClientThread implements Runnable{
                  */
 
                 // TO-DO: Verify better that the first and second messages to be array and simple str
-                if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.SIMPLE_STR)) {
+                // TO-DO: The message processing methods should return a message list which will then be encoded and
+                // sent back to the client
+
+                String response = null;
+
+                if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.BULK_STR)) {
                     throw new InvalidMsgException();
                 }
 
-                Message message = messages.get(1);
+                Message message = messages.get(2);
                 MsgType msgType = message.msgType;
 
-                if(msgType == null) {
-                    throw new InvalidMsgException();
+                if(msgType == null || message.dataType == DataType.ERROR) {
+                    // return back the error message
+                    /**
+                     *  The messages can throw errors during processing
+                     *  Send it back to the client alongside the exception
+                     *
+                     * ERROR message with the exception
+                     * S: *2\r\n
+                     * S: +ERROR\r\n
+                     * S: ${nr of bytes of the string}\r\n
+                     * S: {exception as string}\r\n
+                     */
+                    response = parser.makeBinaryMessage("invalid message!");
                 }
-
-                // TO-DO: The message processing methods should return a message which will then be written to the client
-                List<Message> response = null;
-                // TO-DO: Create a method which extracts the key's name
-                if(msgType == MsgType.SET) {
-                    processSetMsg(messages);
+                else if(msgType == MsgType.SET) {
+                    response = processSetMsg(messages);
                 }
-                if(msgType == MsgType.GET) {
-                    processGetMsg(messages);
+                else if(msgType == MsgType.GET) {
+                    response = processGetMsg(messages);
                 }
-                if(msgType == MsgType.DELETE) {
-                    processDeleteMsg(messages);
+                else if(msgType == MsgType.DELETE) {
+                    response = processDeleteMsg(messages);
                 }
-                // 3rd: write the message back to the client
-                sendMessage();
+                // 4th: write the message back to the client
+                sendMessage(response);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InvalidMsgException e) {
@@ -86,33 +96,77 @@ public class HandleClientThread implements Runnable{
         }
     }
 
-    public void processSetMsg(List<Message> messages) throws InvalidMsgException{
+    /**
+     *
+     * @param messages
+     * @return a list containing the messages to be send back to the client
+     * @throws InvalidMsgException
+     */
+    public String processSetMsg(List<Message> messages){
         /*
         example of client requests for SET("abcd", 123456)
-        C: *2\r\n
-        C: $3\r\n
-        C: SET\r\n
-        C: $4\r\n
-        C: abcd\r\n
-        C: :123456\r\n
+        C: *2\r\n   0
+        C: $3\r\n   1
+        C: SET\r\n  2
+        C: $4\r\n   3
+        C: abcd\r\n     4
+        C: :123456\r\n  5
         */
-        db.put((String)messages.get(2).data[0], messages);
+        List<Message> valueList = new ArrayList<>();
+        for(int i = 5; i < messages.size(); i++) {
+            valueList.add(messages.get(i));
+        }
+        db.put((String)messages.get(4).data[0], valueList);
 
-        // send an OK message back or ERROR
+        // send an OK message back
+        return parser.makeSimpleStrMessage("OK");
     }
 
-    public void processGetMsg(List<Message> messages) throws InvalidMsgException{
+    /**
+     * SET,DELETE messages it will send back an empty OK
+     * GET message will send back and OK alongside the encoded data as string
+     * @return
+     *
+     * Empty OK         OK with data
+     * S: *1\r\n        S: *{nr of messages}\r\n
+     * S: +OK\r\n       S: +OK\r\n
+     *                  S: {data}
+     * {data} will be non-array, however later we will add support to parse complex nested arrays and data
+     * if {data} is array, get each message from the array
+     * {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string
+     */
+    public String processGetMsg(List<Message> messages){
         db.get((String)messages.get(2).data[0]);
 
-        // send an OK message back along with the data or ERROR
+        // send an OK message back along with the data
+
     }
 
-    public void processDeleteMsg(List<Message> messages) throws InvalidMsgException{
-        db.remove((String)messages.get(2).data[0]);
+    /**
+     *
+     * @param messages
+     * @return a list containing the messages to be send back to the client
+     * @throws InvalidMsgException
+     */
+    public String processDeleteMsg(List<Message> messages){
+        /*
+        #### Client requests for **DELETE("abcd")**
+        C: *2\r\n 0
+        C: $6\r\n 1
+        C: DELETE\r\n 2
+        C: $4\r\n 3
+        C: abcd\r\n 4
+        */
+        db.remove((String)messages.get(4).data[0]);
 
-        // send an OK message back or ERROR
+        // send an OK message back
+        return parser.makeSimpleStrMessage("OK");
     }
 
-    public void sendMessage() {
+    /**
+     *
+     * @param response : to be send back to the client
+     */
+    public void sendMessage(String response) {
     }
 }
