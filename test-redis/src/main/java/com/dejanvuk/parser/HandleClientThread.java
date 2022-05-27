@@ -107,6 +107,7 @@ public class HandleClientThread implements Runnable{
      * @throws InvalidMsgException
      */
     public String processSetMsg(List<Message> messages){
+        System.out.println("PROCESSING SET MESSAGE");
         /*
         example of client requests for SET("abcd", 123456)
         C: *2\r\n   0
@@ -140,6 +141,8 @@ public class HandleClientThread implements Runnable{
      * {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string
      */
     public String processGetMsg(List<Message> messages){
+        System.out.println("PROCESSING GET MESSAGE");
+
         // starting the get from 0 cause we store only the contents of the msg
         // check the processSetMsg above
         db.get((String)messages.get(0).data[0]);
@@ -155,6 +158,7 @@ public class HandleClientThread implements Runnable{
      * @throws InvalidMsgException
      */
     public String processDeleteMsg(List<Message> messages){
+        System.out.println("PROCESSING DELETE MESSAGE");
         /*
         #### Client requests for **DELETE("abcd")**
         C: *2\r\n 0

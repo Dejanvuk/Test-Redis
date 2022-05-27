@@ -124,6 +124,8 @@ public class Parser {
     }
 
     public void readData(List<Message> messages) throws IOException {
+        System.out.println("Reading data from client");
+
         int readByte = in.readUnsignedByte();
 
         /* read() is blocking anyway if the buffer is empty
