@@ -248,7 +248,26 @@ public class Parser {
         }
         return sb.toString();
     }
+    // TO:DO:
     //public String makeSetMessage(String key, Object[] values) {}
-    //public String makeGetMessage(String key) {}
-    //public String makeDeleteMessage(String key) {}
+
+    public String makeGetMessage(String key) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(makeArrayMessage(2));
+        sb.append(makeBinaryMessage("GET"));
+        sb.append(sb.append(makeBinaryMessage(key)));
+
+        return sb.toString();
+    }
+
+    public String makeDeleteMessage(String key) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(makeArrayMessage(2));
+        sb.append(makeBinaryMessage("DELETE"));
+        sb.append(sb.append(makeBinaryMessage(key)));
+
+        return sb.toString();
+    }
 }
