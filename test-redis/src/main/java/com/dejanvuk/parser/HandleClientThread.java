@@ -6,6 +6,8 @@ import com.dejanvuk.parser.types.MsgType;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Map;
 public class HandleClientThread implements Runnable{
     private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
     private DataInputStream in = null;
+    private OutputStreamWriter out = null;
     private Parser parser = null;
     Map<String, List<Message>> db = new HashMap<>(); // in-memory db
 
@@ -28,6 +31,7 @@ public class HandleClientThread implements Runnable{
         try {
             in = new DataInputStream(socket.getInputStream());
             parser = new Parser(in);
+            out = new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,6 +173,8 @@ public class HandleClientThread implements Runnable{
      *
      * @param response : to be send back to the client
      */
-    public void sendMessage(String response) {
+    public void sendMessage(String response) throws IOException {
+        out.write(response);
+        out.flush();
     }
 }
