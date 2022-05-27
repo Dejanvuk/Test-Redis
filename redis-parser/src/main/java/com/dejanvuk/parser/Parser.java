@@ -18,7 +18,7 @@ Server also stores the requests in an array, even thoug there might be just one 
 public class Parser {
     private DataInputStream in;
 
-    Parser(DataInputStream in) {
+    public Parser(DataInputStream in) {
         this.in = in;
     }
 
@@ -183,10 +183,7 @@ public class Parser {
     public String makeIntegerMessage(int nr) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(':');
-        sb.append(nr);
-        sb.append('\r');
-        sb.append('\n');
+        sb.append(":" + nr + "\r\n");
 
         return sb.toString();
     }
@@ -194,10 +191,7 @@ public class Parser {
     public String makeSimpleStrMessage(String str) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append('+');
-        sb.append(str);
-        sb.append('\r');
-        sb.append('\n');
+        sb.append("+" + str + "\r\n");
 
         return sb.toString();
     }
@@ -205,10 +199,7 @@ public class Parser {
     public String makeErrorMessage(String exception) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append('-');
-        sb.append(exception);
-        sb.append('\r');
-        sb.append('\n');
+        sb.append("-ERR " + exception + "\r\n");
 
         return sb.toString();
     }
@@ -216,10 +207,14 @@ public class Parser {
     public String makeNullMessage() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append('-');
-        sb.append(1);
-        sb.append('\r');
-        sb.append('\n');
+        sb.append("$-1\r\n");
+
+        return sb.toString();
+    }
+
+    public String makeArrayMessage(int length) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('*' + length + "\r\n");
 
         return sb.toString();
     }
@@ -228,13 +223,32 @@ public class Parser {
         int length = str.length();
         StringBuilder sb = new StringBuilder(length + 6);
 
-        sb.append('$' + length);
-        sb.append('\r');
-        sb.append('\n');
-        sb.append(str);
-        sb.append('\r');
-        sb.append('\n');
+        sb.append('$' + length + "\r\n");
+        sb.append(str + "\r\n");
 
         return sb.toString();
     }
+
+    /**
+     * Exposed for clients to use
+     * @param key
+     * @param val
+     * @return
+     */
+    // TO-DO: Move to a separate class and expose this as an interface
+    public String makeSetMessage(String key, Object val) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(makeArrayMessage(3));
+        sb.append(makeBinaryMessage("SET"));
+        if(val.getClass() == Integer.class) {
+            sb.append(makeIntegerMessage((Integer) val));
+        }
+        else if(val.getClass() == String.class) {
+            sb.append(makeBinaryMessage((String) val));
+        }
+        return sb.toString();
+    }
+    //public String makeSetMessage(String key, Object[] values) {}
+    //public String makeGetMessage(String key) {}
+    //public String makeDeleteMessage(String key) {}
 }
