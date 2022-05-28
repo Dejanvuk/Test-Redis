@@ -1,11 +1,14 @@
 package com.dejanvuk.testclient;
 
+import com.dejanvuk.parser.Message;
 import com.dejanvuk.parser.Parser;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HandleServerCommunicationThread implements Runnable{
     private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
@@ -42,6 +45,14 @@ public class HandleServerCommunicationThread implements Runnable{
             System.out.println(getTest1);
             sendMessage(getTest1);
             */
+            List<Message> messages = new ArrayList<>();
+            // 1st: read the data
+            try {
+                parser.readData(messages);
+                System.out.println("read messages");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

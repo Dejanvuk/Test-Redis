@@ -12,7 +12,7 @@ C: *3\r\n
 C: $3\r\n   
 C: SET\r\n  
 C: $4\r\n   
-C: abcd\r\n 
+C: abcd\r\n     
 C: :123456\r\n
 
 #### Client requests for **SET("array", {1, 22, 3})**
@@ -67,6 +67,13 @@ S: +ERROR\r\n
 S: ${nr of bytes of the string}\r\n     
 S: {exception as bulk string}\r\n    
 
+
+## Ways to know when the message ended
+1) Simply close the connection (inneficient, especially for CLI or during high traffic)
+2) End the message with a unique end-of-message marker
+3) The length is being specified by the protocol(In our case we know that the message is always an array with a pre-determined length specified by the 2nd byte)
+
+Needless to say, the Redis app uses the 3rd way which is the most efficient in this case.
 ___
 ## TO-DO:
 * Add support for arrays with different data types, for example arrays of strings and integers

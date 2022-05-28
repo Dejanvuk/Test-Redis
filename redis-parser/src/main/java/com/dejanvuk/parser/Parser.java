@@ -34,9 +34,7 @@ public class Parser {
 
         StringBuilder sb = new StringBuilder(length + 6);
 
-        sb.append('*' + length + 1); // 1 extra for the Ok simple string
-        sb.append('\r');
-        sb.append('\n');
+        sb.append(makeArrayMessage(length + 1)); // 1 extra for the Ok simple string
         sb.append(makeSimpleStrMessage("OK"));
         for(int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
@@ -216,7 +214,7 @@ public class Parser {
 
     public String makeArrayMessage(int length) {
         StringBuilder sb = new StringBuilder();
-        sb.append('*' + length + "\r\n");
+        sb.append("*" + length + "\r\n");
 
         return sb.toString();
     }
@@ -225,7 +223,7 @@ public class Parser {
         int length = str.length();
         StringBuilder sb = new StringBuilder(length + 6);
 
-        sb.append('$' + length + "\r\n");
+        sb.append("$" + length + "\r\n");
         sb.append(str + "\r\n");
 
         return sb.toString();
@@ -242,6 +240,7 @@ public class Parser {
         StringBuilder sb = new StringBuilder();
         sb.append(makeArrayMessage(3));
         sb.append(makeBinaryMessage("SET"));
+        sb.append(makeBinaryMessage(key));
         if(val.getClass() == Integer.class) {
             sb.append(makeIntegerMessage((Integer) val));
         }
