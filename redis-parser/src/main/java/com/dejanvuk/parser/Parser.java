@@ -2,6 +2,7 @@ package com.dejanvuk.parser;
 
 import com.dejanvuk.parser.exceptions.InvalidMsgException;
 import com.dejanvuk.parser.types.DataType;
+import com.dejanvuk.parser.types.MsgType;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -112,7 +113,18 @@ public class Parser {
 
         Object[] data = new Object[1];
         data[0] = String.valueOf(str);
+
         Message message = new Message.MessageBuilder().setDataType(DataType.BULK_STR).setData(data).setLength(length).build();
+
+        if(data[0].equals("GET")) {
+            message.msgType = MsgType.GET;
+        }
+        else if(data[0].equals("SET")) {
+            message.msgType = MsgType.SET;
+        }
+        else if(data[0].equals("DELETE")) {
+            message.msgType = MsgType.DELETE;
+        }
         messages.add(message);
     }
 

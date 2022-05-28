@@ -45,14 +45,16 @@ public class HandleServerCommunicationThread implements Runnable{
             System.out.println(getTest1);
             sendMessage(getTest1);
             */
+
+            /*
             List<Message> messages = new ArrayList<>();
-            // 1st: read the data
             try {
                 parser.readData(messages);
                 System.out.println("read messages");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            */
         }
     }
 
