@@ -1,5 +1,6 @@
 package com.dejanvuk.parser;
 
+import com.dejanvuk.parser.exceptions.InvalidMsgException;
 import com.dejanvuk.parser.types.DataType;
 
 import java.io.BufferedReader;
@@ -117,20 +118,55 @@ public class Parser {
 
     public void readArray(List<Message> messages) throws IOException {
         int length = readInteger(); // read the length of the array
+        in.skipBytes(2); // skip CLRF
+
         Message message = new Message.MessageBuilder().setDataType(DataType.ARRAY).setLength(length).build();
         messages.add(message);
     }
 
     public void readData(List<Message> messages) throws IOException {
+        System.out.println("Incoming message from client");
+
+        char dataType = (char) in.readUnsignedByte();
+
+        if(dataType != '*') { // First message is always an array
+            throw new InvalidMsgException("Invalid message: expected an array first");
+        }
+
+        int length = readInteger(); // read the length of the array
+        in.skipBytes(2); // skip CLRF
+
+        for(int i = 0; i < length; i++) {
+            dataType = (char)in.readUnsignedByte(); // read the first byte of the reply
+
+            switch (dataType) {
+                case '+': // Simple Strings
+                    readSimpleString(messages);
+                    break;
+                case '-': // Errors
+                    readError(messages);
+                    break;
+                case ':': //  Integers
+                    readInteger(messages);
+                    break;
+                case '$': // Bulk Strings
+                    readBulkString(messages);
+                    break;
+                case '*': // Arrays
+                    readArray(messages);
+                    break;
+                default:
+                    throw new InvalidMsgException("Invalid message: Improper message type!");
+            }
+        }
+    }
+
+    /*
+    public void readDataOld(List<Message> messages) throws IOException {
         System.out.println("Reading data from client");
 
         int readByte = in.readUnsignedByte();
 
-        /* read() is blocking anyway if the buffer is empty
-        if(readByte == -1) { // -1 if the end of the stream has been reached
-            return;
-        }
-        */
 
         char dataType = (char)readByte; // read the first byte of the reply
 
@@ -157,6 +193,7 @@ public class Parser {
 
         readData(messages);
     }
+    */
 
     // TO-DO: Test this method
     public int readInteger() throws IOException {
