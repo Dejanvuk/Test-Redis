@@ -46,7 +46,7 @@ public class HandleServerCommunicationThread implements Runnable{
             sendMessage(getTest1);
             */
 
-            /*
+
             List<Message> messages = new ArrayList<>();
             try {
                 parser.readData(messages);
@@ -54,7 +54,7 @@ public class HandleServerCommunicationThread implements Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            */
+
         }
     }
 

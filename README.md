@@ -62,10 +62,9 @@ S: :22\r\n
 S: :3\r\n   
 
 #### **ERROR** message alongside the exception
-S: *2\r\n   
-S: +ERROR\r\n   
-S: ${nr of bytes of the string}\r\n     
-S: {exception as bulk string}\r\n    
+S: *1\r\n   
+S: -{ERROR} {exception as bulk string}\r\n   
+
 
 
 ## Ways to know when the message ended

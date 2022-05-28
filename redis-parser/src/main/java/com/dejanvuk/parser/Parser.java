@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /*
@@ -172,40 +173,6 @@ public class Parser {
         }
     }
 
-    /*
-    public void readDataOld(List<Message> messages) throws IOException {
-        System.out.println("Reading data from client");
-
-        int readByte = in.readUnsignedByte();
-
-
-        char dataType = (char)readByte; // read the first byte of the reply
-
-        switch (dataType) {
-            case '+': // Simple Strings
-                readSimpleString(messages);
-                break;
-            case '-': // Errors
-                readError(messages);
-                break;
-            case ':': //  Integers
-                readInteger(messages);
-                break;
-            case '$': // Bulk Strings
-                readBulkString(messages);
-                break;
-            case '*': // Arrays
-                readArray(messages);
-                break;
-            default:
-                // invalid data type; return error
-
-        }
-
-        readData(messages);
-    }
-    */
-
     // TO-DO: Test this method
     public int readInteger() throws IOException {
         int result = 0;
@@ -244,10 +211,20 @@ public class Parser {
         return sb.toString();
     }
 
-    public String makeErrorMessage(String exception) {
+    public String makeOkMessage() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("-ERR " + exception + "\r\n");
+        sb.append(makeArrayMessage(1));
+        sb.append("+OK\r\n");
+
+        return sb.toString();
+    }
+
+    public String makeErrorMessage(String error, String exception) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(makeArrayMessage(1));
+        sb.append("-" + error + " " + exception + "\r\n");
 
         return sb.toString();
     }
@@ -320,4 +297,40 @@ public class Parser {
 
         return sb.toString();
     }
+
+    /* ====================
+    Utility methods for printing to CLI
+    ====================
+    */
+
+    public void printMessage(Message message) {
+
+    }
+
+    /**
+     * Prints the list of messages received without the first array message
+     */
+    public void printMessageReceived(List<Message> messages) {
+
+    }
+
+    /**
+     * Prints the whole database
+     */
+    public void printDatabase(Map<String, List<Message>> db) {
+
+    }
+
+    /**
+     * Prints the value at key from database
+     * @param key
+     */
+    public void printDbEntry( Map<String, List<Message>> db, String key) {
+
+    }
+
+    /* ====================
+    Utility methods for parsing CLI input, for example messages
+    ====================
+    */
 }

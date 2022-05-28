@@ -56,25 +56,22 @@ public class HandleClientThread implements Runnable{
 
                 String response = null;
 
-                if(!messages.get(0).dataType.equals(DataType.BULK_STR)) {
-                    throw new InvalidMsgException();
-                }
-
                 Message message = messages.get(0);
                 MsgType msgType = message.msgType;
 
-                if(msgType == null || message.dataType == DataType.ERROR) {
+                if(!messages.get(0).dataType.equals(DataType.BULK_STR)) {
+                    response = parser.makeErrorMessage("ERROR:","First message is always an array!");
+                }
+                else if(msgType == null || message.dataType == DataType.ERROR) {
                     /**
                      *  The messages can throw errors during processing
                      *  Send it back to the client alongside the exception
                      *
                      * ERROR message with the exception
                      * S: *2\r\n
-                     * S: +ERROR\r\n
-                     * S: ${nr of bytes of the string}\r\n
-                     * S: {exception as string}\r\n
+                     * S: -{ERROR} {exception as string}\r\n
                      */
-                    response = parser.makeBinaryMessage("invalid message!");
+                    response = parser.makeErrorMessage("ERROR:","Invalid message received, please see the --help for guidance!");
                 }
                 else if(msgType == MsgType.SET) {
                     response = processSetMsg(messages);
@@ -95,6 +92,23 @@ public class HandleClientThread implements Runnable{
                 // TO-DO: Send client an error message
             }
         }
+
+        /*
+        try {
+            cleanUp();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+    }
+
+    /**
+     * Cleans up the resources
+     */
+    public void cleanUp() throws IOException {
+        if(in != null) in.close();
+        if(out != null) out.close();
+        // We don't close the socket in here, we will close it manually if needed after sending the message completely
     }
 
     /**
@@ -118,10 +132,11 @@ public class HandleClientThread implements Runnable{
         for(int i = 2; i < messages.size(); i++) {
             valueList.add(messages.get(i));
         }
-        db.put((String)messages.get(4).data[0], valueList);
+
+        db.put((String)messages.get(1).data[0], valueList);
 
         // send an OK message back
-        return parser.makeSimpleStrMessage("OK");
+        return parser.makeOkMessage();
     }
 
     /**
@@ -166,7 +181,7 @@ public class HandleClientThread implements Runnable{
         db.remove((String)messages.get(1).data[0]);
 
         // send an OK message back
-        return parser.makeSimpleStrMessage("OK");
+        return parser.makeOkMessage();
     }
 
     /**

@@ -18,9 +18,11 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
 
+
+
             System.out.println("Waiting for incoming client connections on: " + serverSocket.getInetAddress() + ":" + port);
         } catch (IOException e) {
-            // TO-DO "Error could not listen on port " + port"
+            System.out.println("Error could not listen on port " + port);
             System.exit(1);
         }
 
@@ -39,5 +41,13 @@ public class Server {
                 e.printStackTrace();
             }
         }
+
+        /*
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
     }
 }
