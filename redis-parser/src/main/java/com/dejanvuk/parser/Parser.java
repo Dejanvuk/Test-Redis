@@ -134,7 +134,6 @@ public class Parser {
         }
 
         int length = readInteger(); // read the length of the array
-        in.skipBytes(2); // skip CLRF
 
         for(int i = 0; i < length; i++) {
             dataType = (char)in.readUnsignedByte(); // read the first byte of the reply
