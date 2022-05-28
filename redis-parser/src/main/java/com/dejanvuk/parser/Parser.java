@@ -315,7 +315,7 @@ public class Parser {
             Message message = messages.get(i);
 
             if(message.msgType != null) {
-                sb.append(message.msgType.toString() + "(");
+                sb.append("Command received: " + message.msgType.toString() + "(");
                 isMsg = true;
             }
             else {
@@ -338,13 +338,7 @@ public class Parser {
         System.out.println(sb.toString());
     }
 
-    /**
-     * Prints the list of messages received without the first array message
-     */
-    public void printMessageReceived(List<Message> messages) {
-
-    }
-
+    // TO-DO: Not yet needed :)
     /**
      * Prints the whole database
      */

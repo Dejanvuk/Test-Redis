@@ -42,6 +42,9 @@ public class HandleClientThread implements Runnable{
                 // 1st: read the data
                 parser.readData(messages);
 
+                // 1.1st: Print the command received
+                parser.printMessage(messages);
+
                 // 2nd: process the data
 
                 /*
