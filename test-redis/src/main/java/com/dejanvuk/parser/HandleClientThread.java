@@ -60,11 +60,10 @@ public class HandleClientThread implements Runnable{
                     throw new InvalidMsgException();
                 }
 
-                Message message = messages.get(1);
+                Message message = messages.get(0);
                 MsgType msgType = message.msgType;
 
                 if(msgType == null || message.dataType == DataType.ERROR) {
-                    // return back the error message
                     /**
                      *  The messages can throw errors during processing
                      *  Send it back to the client alongside the exception
@@ -86,6 +85,7 @@ public class HandleClientThread implements Runnable{
                 else if(msgType == MsgType.DELETE) {
                     response = processDeleteMsg(messages);
                 }
+
                 // 4th: write the message back to the client
                 sendMessage(response);
             } catch (IOException e) {
@@ -107,15 +107,15 @@ public class HandleClientThread implements Runnable{
         System.out.println("PROCESSING SET MESSAGE");
         /*
         example of client requests for SET("abcd", 123456)
-        C: *2\r\n   0
-        C: $3\r\n   1
-        C: SET\r\n  2
-        C: $4\r\n   3
-        C: abcd\r\n     4
-        C: :123456\r\n  5
+        C: $3\r\n   0
+        C: SET\r\n
+        C: $4\r\n   1
+        C: abcd\r\n
+        C: :123456\r\n  2
+        {$ String: "SET"},{$ String: "ABCD"},{: Integer: 123456}
         */
         List<Message> valueList = new ArrayList<>();
-        for(int i = 5; i < messages.size(); i++) {
+        for(int i = 2; i < messages.size(); i++) {
             valueList.add(messages.get(i));
         }
         db.put((String)messages.get(4).data[0], valueList);
@@ -142,7 +142,7 @@ public class HandleClientThread implements Runnable{
 
         // starting the get from 0 cause we store only the contents of the msg
         // check the processSetMsg above
-        db.get((String)messages.get(0).data[0]);
+        db.get((String)messages.get(1).data[0]);
 
         // send an OK message back along with the data
         return parser.encodeResponse(messages);
@@ -158,13 +158,12 @@ public class HandleClientThread implements Runnable{
         System.out.println("PROCESSING DELETE MESSAGE");
         /*
         #### Client requests for **DELETE("abcd")**
-        C: *2\r\n 0
-        C: $6\r\n 1
-        C: DELETE\r\n 2
-        C: $4\r\n 3
-        C: abcd\r\n 4
+        C: $6\r\n 0
+        C: DELETE\r\n
+        C: $4\r\n  1
+        C: abcd\r\n
         */
-        db.remove((String)messages.get(4).data[0]);
+        db.remove((String)messages.get(1).data[0]);
 
         // send an OK message back
         return parser.makeSimpleStrMessage("OK");
