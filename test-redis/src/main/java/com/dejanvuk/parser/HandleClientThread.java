@@ -46,24 +46,21 @@ public class HandleClientThread implements Runnable{
 
                 /*
                 Note:
-                -first message is always an array
-                -second message is always a simple string with the command name in msgType
+                -first message from client is always a BULK STR with the command name
+                -second message is always another BULK STR with the name of the key
+                -the server can send back direct messages like OK or ERROR though
 
                 Read through-out the messages list and process the data
                 Also use a double-linked list for LRU cache functionality
-                 */
-
-                // TO-DO: Verify better that the first and second messages to be array and simple str
-                // TO-DO: The message processing methods should return a message list which will then be encoded and
-                // sent back to the client
+                */
 
                 String response = null;
 
-                if(!messages.get(0).dataType.equals(DataType.ARRAY) || !messages.get(1).dataType.equals(DataType.BULK_STR)) {
+                if(!messages.get(0).dataType.equals(DataType.BULK_STR)) {
                     throw new InvalidMsgException();
                 }
 
-                Message message = messages.get(2);
+                Message message = messages.get(1);
                 MsgType msgType = message.msgType;
 
                 if(msgType == null || message.dataType == DataType.ERROR) {
