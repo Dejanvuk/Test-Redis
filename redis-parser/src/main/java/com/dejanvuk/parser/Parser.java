@@ -248,6 +248,7 @@ public class Parser {
         else if(val.getClass() == String.class) {
             sb.append(makeBinaryMessage((String) val));
         }
+
         return sb.toString();
     }
     // TO:DO:

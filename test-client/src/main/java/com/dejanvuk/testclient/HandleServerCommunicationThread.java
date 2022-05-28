@@ -27,7 +27,11 @@ public class HandleServerCommunicationThread implements Runnable{
             e.printStackTrace();
         }
 
-        while(true) { // listen for messages from the server
+        String setTest1 = parser.makeSetMessage("abcd", 123456);
+        System.out.println(setTest1);
+        sendMessage(setTest1);
+        while(!socket.isClosed()) { // listen for messages from the server
+            //System.out.println("Waiting for server messages");
             /*
             // SET("abcd", 123456)
             String setTest1 = parser.makeSetMessage("abcd", 123456);
