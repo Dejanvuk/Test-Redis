@@ -13,7 +13,6 @@ import java.util.List;
 public class HandleServerCommunicationThread implements Runnable{
     private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
     private DataInputStream in = null;
-    private OutputStreamWriter out = null;
     private Parser parser = null;
 
     public HandleServerCommunicationThread(Socket socket) {
@@ -25,14 +24,10 @@ public class HandleServerCommunicationThread implements Runnable{
         try {
             this.in = new DataInputStream(socket.getInputStream());
             this.parser = new Parser(in);
-            this.out = new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        String setTest1 = parser.makeSetMessage("abcd", 123456);
-        System.out.println("set(\"abcd), 123456) sent");
-        sendMessage(setTest1);
         while(!socket.isClosed()) { // listen for messages from the server
             //System.out.println("Waiting for server messages");
             /*
@@ -55,15 +50,6 @@ public class HandleServerCommunicationThread implements Runnable{
                 e.printStackTrace();
             }
 
-        }
-    }
-
-    public void sendMessage(String response) {
-        try {
-            out.write(response);
-            out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

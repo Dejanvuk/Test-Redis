@@ -275,8 +275,8 @@ public class Parser {
 
         return sb.toString();
     }
-    // TO:DO:
-    //public String makeSetMessage(String key, Object[] values) {}
+    // TO-DO: Add support for array
+    //public String makeSetMessage(String key, List<Object> values) {}
 
     public String makeGetMessage(String key) {
         StringBuilder sb = new StringBuilder();
@@ -353,12 +353,4 @@ public class Parser {
     public void printDbEntry( Map<String, List<Message>> db, String key) {
 
     }
-
-    /* ====================
-    Utility methods for parsing CLI input, for example messages
-    ====================
-    */
-
-
-
 }
