@@ -36,14 +36,16 @@ public class HandleClientThread implements Runnable{
             e.printStackTrace();
         }
 
-        while(socket.isConnected()) {
+        /*
+        * Main loop where we read the incoming commands from the client
+        * */
+        while(!socket.isClosed()) {
             try {
                 List<Message> messages = new ArrayList<>();
                 // 1st: read the data
                 parser.readData(messages);
 
                 // 1.1st: Print the command received
-                System.out.print("Message received and parsed: ");
                 PrintUtility.printMessage(messages);
 
                 // 2nd: process the data
@@ -91,19 +93,24 @@ public class HandleClientThread implements Runnable{
                 sendMessage(response);
             } catch (IOException e) {
                 e.printStackTrace();
+                try {
+                    cleanUp();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             } catch (InvalidMsgException e) {
                 e.printStackTrace();
                 // TO-DO: Send client an error message
             }
         }
 
-        /*
+
         try {
             cleanUp();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
+
     }
 
     /**
@@ -112,7 +119,8 @@ public class HandleClientThread implements Runnable{
     public void cleanUp() throws IOException {
         if(in != null) in.close();
         if(out != null) out.close();
-        // We don't close the socket in here, we will close it manually if needed after sending the message completely
+
+        //if(socket != null) socket.close();// We don't close the socket in here, we will close it manually if needed after sending the message completely
     }
 
     /**

@@ -70,6 +70,8 @@ public class UtilityCli {
 
         key = keyBuilder.toString();
 
+
+        // only for SET,MSET,MGET command
         if(line.charAt(++i) != ',') {
             System.out.println("Incorrect command: missing , after keyBuilder");
             return;
@@ -78,7 +80,7 @@ public class UtilityCli {
             i++; // skip the ','
         }
         // 1c: read the value/values for arrays
-        boolean isInteger = false;
+        boolean isInteger = true;
         while(i < line.length()) {
             char curr = line.charAt(i++);
             if(curr == ')' ||
@@ -103,13 +105,13 @@ public class UtilityCli {
 
         String response = "";
 
-        if(command.equals(MsgType.SET)) {
+        if(command.equals(MsgType.SET.name())) {
             response = MakeCommandUtility.makeSetMessage(key, values); // remove get(O) for arrays
         }
-        else if(command.equals(MsgType.GET)) {
+        else if(command.equals(MsgType.GET.name())) {
             response = MakeCommandUtility.makeGetMessage(key);
         }
-        else if(command.equals(MsgType.DELETE)) {
+        else if(command.equals(MsgType.DELETE.name())) {
             response = MakeCommandUtility.makeDeleteMessage(key);
         }
 

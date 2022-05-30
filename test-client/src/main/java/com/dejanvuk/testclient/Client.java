@@ -41,6 +41,11 @@ public class Client {
             if(userInput.equals("exit")) {
                 System.out.println("See ya!");
                 // TO-DO: do clean up
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.exit(1);
             }
 

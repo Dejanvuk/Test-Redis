@@ -138,8 +138,6 @@ public class Parser {
     }
 
     public void readData(List<Message> messages) throws IOException {
-        System.out.println("Proceeding to read the data received.");
-
         char dataType = (char) in.readUnsignedByte();
 
         if(dataType != '*') { // First message is always an array

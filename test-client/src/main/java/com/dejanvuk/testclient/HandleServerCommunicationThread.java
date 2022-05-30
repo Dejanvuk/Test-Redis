@@ -46,7 +46,6 @@ public class HandleServerCommunicationThread implements Runnable{
             List<Message> messages = new ArrayList<>();
             try {
                 parser.readData(messages);
-                System.out.print("Message received and parsed: ");
                 PrintUtility.printMessage(messages);
             } catch (IOException e) {
                 e.printStackTrace();
