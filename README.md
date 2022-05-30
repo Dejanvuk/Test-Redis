@@ -5,7 +5,7 @@
 * LRU cache
 * parser
 
-# The protocol and a couple of message examples
+# The protocol and a couple of message examples, by default UTF-8
 [Redis Protocol](https://redis.io/docs/reference/protocol-spec/)
 #### Client requests for **SET("abcd", 123456)**
 C: *3\r\n   
@@ -74,8 +74,11 @@ S: -{ERROR} {exception as bulk string}\r\n
 
 Needless to say, the Redis app uses the 3rd way which is the most efficient in this case.
 ___
-## TO-DO:
-* Add support for arrays with different data types, for example arrays of strings and integers
-* Add support for nested data types, for example nested arrays
-* Add support for MSET and MGET
-* Add support for multiple commands aka pipelining
+## EXTRA TO-DO's:
+- [x] Add support for arrays with different data types, for example arrays of strings and integers
+- [ ] Add support for nested data types, for example nested arrays
+- [ ] Add support for MSET and MGET
+- [ ] Add LRU cache support
+- [ ] Add serializer/deserializer to persist data on disk if needed
+- [ ] Add support for multiple commands aka pipelining
+- [ ] Port the sdk interface to JS/TS and default to HTTP if websockets are not enabled in the browser

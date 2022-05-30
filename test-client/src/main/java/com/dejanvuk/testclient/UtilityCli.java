@@ -37,12 +37,13 @@ public class UtilityCli {
         // TO-DO: Needs more validation testing for bad input
         // TO-DO: Add support for array
 
-        line = line.replaceAll("\\s","");//Remove white lines str.replaceAll("\\s","");
+        line = line.replaceAll("\\s","");// Remove white lines , just to be sure
 
         StringBuilder commandBuilder = new StringBuilder(); String command = "";
         StringBuilder keyBuilder = new StringBuilder(); String key = "";
         StringBuilder valueBuilder = new StringBuilder();
         List<Object> values = new ArrayList<>();
+        String response = ""; // will hold the final encoded version of the command to be sent to the Redis server
 
         int i = 0;
         // 1a:read the commandBuilder
@@ -50,7 +51,7 @@ public class UtilityCli {
             commandBuilder.append(line.charAt(i++));
         }
 
-        command = commandBuilder.toString().toUpperCase(Locale.ROOT);
+        command = commandBuilder.toString().toUpperCase(Locale.ROOT); // make the ocmmand to upper case, just to be sure
 
         // if commandBuilder not found print the error and exit immediately
         if(!isCommandValid(command)) {
@@ -72,41 +73,34 @@ public class UtilityCli {
 
 
         // only for SET,MSET,MGET command
-        if(line.charAt(++i) != ',') {
-            System.out.println("Incorrect command: missing , after keyBuilder");
-            return;
-        }
-        else {
-            i++; // skip the ','
-        }
-        // 1c: read the value/values for arrays
-        boolean isInteger = true;
-        while(i < line.length()) {
-            char curr = line.charAt(i++);
-            if(curr == ')' ||
-                    (isInteger == false && curr == '"') || // string value ended
-                    (isInteger == true && curr == ',')) { // integer value ended
-                if(isInteger) {
-                    values.add(Integer. valueOf(valueBuilder.toString()));
-                }
-                else { // string
-                    values.add(valueBuilder.toString());
-                    i++; // also skip the , char
-                }
-                valueBuilder = new StringBuilder();
-            }
-            valueBuilder.append(curr);
-        }
-
-        //Just for testing purposes
-        System.out.println(command + " " + key);
-
-        // 1d: make the command
-
-        String response = "";
-
         if(command.equals(MsgType.SET.name())) {
-            response = MakeCommandUtility.makeSetMessage(key, values); // remove get(O) for arrays
+            if(line.charAt(++i) != ',') {
+                System.out.println("Incorrect command: missing , after keyBuilder");
+                return;
+            }
+            else {
+                i++; // skip the ','
+            }
+            // 1c: read the value/values for arrays
+            boolean isInteger = true;
+            while(i < line.length()) {
+                char curr = line.charAt(i++);
+                if(curr == ')' ||
+                        (isInteger == false && curr == '"') || // string value ended
+                        (isInteger == true && curr == ',')) { // integer value ended
+                    if(isInteger) {
+                        values.add(Integer. valueOf(valueBuilder.toString()));
+                    }
+                    else { // string
+                        values.add(valueBuilder.toString());
+                        i++; // also skip the , char
+                    }
+                    valueBuilder = new StringBuilder();
+                }
+                valueBuilder.append(curr);
+            }
+
+            response = MakeCommandUtility.makeSetMessage(key, values);
         }
         else if(command.equals(MsgType.GET.name())) {
             response = MakeCommandUtility.makeGetMessage(key);
@@ -114,6 +108,9 @@ public class UtilityCli {
         else if(command.equals(MsgType.DELETE.name())) {
             response = MakeCommandUtility.makeDeleteMessage(key);
         }
+
+        //Just for testing purposes
+        System.out.println(command + " " + key);
 
         // send the command to the server
         sendMessage(response);
