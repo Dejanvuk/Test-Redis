@@ -19,7 +19,7 @@ public class HandleClientThread implements Runnable{
     private DataInputStream in = null;
     private OutputStreamWriter out = null;
     private Parser parser = null;
-    Map<String, List<Message>> db = new HashMap<>(); // in-memory db
+    Map<String, List<Object>> db = new HashMap<>(); // in-memory db
 
 
     public HandleClientThread(Socket socket) {
@@ -66,7 +66,7 @@ public class HandleClientThread implements Runnable{
                 MsgType msgType = message.msgType;
 
                 if(!messages.get(0).dataType.equals(DataType.BULK_STR)) {
-                    response = MakeCommandUtility.makeErrorMessage("ERROR:","First message is always an array!");
+                    response = MakeCommandUtility.makeErrorMessage("ERROR:","Invalid command received, please see the --help for guidance!");
                 }
                 else if(msgType == null || message.dataType == DataType.ERROR) {
                     /**
@@ -77,7 +77,7 @@ public class HandleClientThread implements Runnable{
                      * S: *2\r\n
                      * S: -{ERROR} {exception as string}\r\n
                      */
-                    response = MakeCommandUtility.makeErrorMessage("ERROR:","Invalid message received, please see the --help for guidance!");
+                    response = MakeCommandUtility.makeErrorMessage("ERROR:","Invalid command received, please see the --help for guidance!");
                 }
                 else if(msgType == MsgType.SET) {
                     response = processSetMsg(messages);
@@ -140,12 +140,12 @@ public class HandleClientThread implements Runnable{
         C: :123456\r\n  2
         {$ String: "SET"},{$ String: "ABCD"},{: Integer: 123456}
         */
-        List<Message> valueList = new ArrayList<>();
+        List<Object> valueList = new ArrayList<>();
         for(int i = 2; i < messages.size(); i++) {
-            valueList.add(messages.get(i));
+            valueList.add(messages.get(i).data);
         }
 
-        db.put((String)messages.get(1).data[0], valueList);
+        db.put((String)messages.get(1).data, valueList);
 
         // send an OK message back
         return MakeCommandUtility.makeOkMessage();
@@ -169,10 +169,10 @@ public class HandleClientThread implements Runnable{
 
         // starting the get from 0 cause we store only the contents of the msg
         // check the processSetMsg above
-        db.get((String)messages.get(1).data[0]);
+        List<Object> valueList = db.get((String)messages.get(1).data);
 
         // send an OK message back along with the data
-        return parser.encodeResponse(messages);
+        return MakeCommandUtility.makeOkMessageWithData(valueList);
     }
 
     /**
@@ -190,7 +190,7 @@ public class HandleClientThread implements Runnable{
         C: $4\r\n  1
         C: abcd\r\n
         */
-        db.remove((String)messages.get(1).data[0]);
+        db.remove((String)messages.get(1).data);
 
         // send an OK message back
         return MakeCommandUtility.makeOkMessage();

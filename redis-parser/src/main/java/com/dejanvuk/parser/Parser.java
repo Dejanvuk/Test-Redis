@@ -25,41 +25,9 @@ public class Parser {
         this.in = in;
     }
 
-    /**
-     * Encodes the Message List
-     * Typically used for GET messages
-     * @param messages
-     * @return
-     */
-    // TO-DO: Test this method
-    public String encodeResponse(List<Message> messages) {
-        int length = messages.size();
-
-        StringBuilder sb = new StringBuilder(length + 6);
-
-        sb.append(MakeCommandUtility.makeArrayMessage(length + 1)); // 1 extra for the Ok simple string
-        sb.append(MakeCommandUtility.makeSimpleStrMessage("OK"));
-        for(int i = 0; i < messages.size(); i++) {
-            Message message = messages.get(i);
-
-            if(message.dataType == DataType.INTEGER) {
-                sb.append(MakeCommandUtility.makeIntegerMessage((Integer)message.data[0]));
-            }
-            else if(message.dataType == DataType.SIMPLE_STR) {
-                sb.append(MakeCommandUtility.makeSimpleStrMessage((String) message.data[0]));
-            }
-            else if(message.dataType == DataType.BULK_STR) {
-                sb.append(MakeCommandUtility.makeBinaryMessage((String) message.data[0]));
-            }
-        }
-
-        return sb.toString();
-    }
-
     public void readInteger(List<Message> messages) throws IOException {
         int number = readInteger();
-        Object[] data = new Object[1];
-        data[0] = number;
+        Integer data = number;
         Message message = new Message.MessageBuilder().setDataType(DataType.INTEGER).setData(data).build();
         messages.add(message);
     }
@@ -75,8 +43,7 @@ public class Parser {
         }
         in.skipBytes(1); // skip CLRF, only \n left to skip
 
-        Object[] data = new Object[1];
-        data[0] = sb.toString();
+        String data = sb.toString();
         Message message = new Message.MessageBuilder().setDataType(DataType.SIMPLE_STR).setData(data).build();
         messages.add(message);
     }
@@ -97,8 +64,7 @@ public class Parser {
         }
         in.skipBytes(1); // skip CLRF, only \n left to skip
 
-        Object[] data = new Object[1];
-        data[0] = sb.toString();
+        String data = sb.toString();
         Message message = new Message.MessageBuilder().setDataType(DataType.ERROR).setData(data).build();
         messages.add(message);
     }
@@ -112,18 +78,17 @@ public class Parser {
         }
         in.skipBytes(2); // skip CLRF
 
-        Object[] data = new Object[1];
-        data[0] = String.valueOf(str);
+        String data = String.valueOf(str);
 
         Message message = new Message.MessageBuilder().setDataType(DataType.BULK_STR).setData(data).setLength(length).build();
 
-        if(data[0].equals("GET")) {
+        if(data.equals("GET")) {
             message.msgType = MsgType.GET;
         }
-        else if(data[0].equals("SET")) {
+        else if(data.equals("SET")) {
             message.msgType = MsgType.SET;
         }
-        else if(data[0].equals("DELETE")) {
+        else if(data.equals("DELETE")) {
             message.msgType = MsgType.DELETE;
         }
         messages.add(message);

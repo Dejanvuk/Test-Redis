@@ -28,10 +28,10 @@ public class PrintUtility {
             }
             else {
                 if(message.dataType == DataType.INTEGER) {
-                    sb.append(Integer.toString((Integer) message.data[0]));
+                    sb.append(Integer.toString((Integer) message.data));
                 }
                 else {
-                    sb.append((String) message.data[0]);
+                    sb.append((String) message.data);
                 }
 
                 if(i != messages.size() - 1)

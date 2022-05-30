@@ -10,7 +10,7 @@ public class Message {
     MsgType msgType;
     DataType dataType;
     int length; // only for binary and arrays
-    Object[] data;
+    Object data;
 
     public Message(MessageBuilder messageBuilder) {
         this.msgType = messageBuilder.msgType;
@@ -23,7 +23,7 @@ public class Message {
         MsgType msgType = null;
         DataType dataType = null;
         int length = 0; // only for binary and arrays
-        Object[] data  = null;
+        Object data  = null;
 
         public MessageBuilder setMsgType(MsgType msgType) {
             this.msgType = msgType;
@@ -40,7 +40,7 @@ public class Message {
             return this;
         }
 
-        public MessageBuilder setData(Object[] data) {
+        public MessageBuilder setData(Object data) {
             this.data = data;
             return this;
         }

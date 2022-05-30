@@ -1,5 +1,7 @@
 package com.dejanvuk.parser;
 
+import com.dejanvuk.parser.types.DataType;
+
 import java.util.List;
 
 /**
@@ -45,7 +47,7 @@ public class MakeCommandUtility {
 
         sb.append(makeArrayMessage(2));
         sb.append(makeBinaryMessage("GET"));
-        sb.append(sb.append(makeBinaryMessage(key)));
+        sb.append(makeBinaryMessage(key));
 
         return sb.toString();
     }
@@ -84,7 +86,26 @@ public class MakeCommandUtility {
         StringBuilder sb = new StringBuilder();
 
         sb.append(makeArrayMessage(1));
-        sb.append("+OK\r\n");
+        sb.append(MakeCommandUtility.makeSimpleStrMessage("OK"));
+
+        return sb.toString();
+    }
+
+    public static String makeOkMessageWithData(List<Object> values) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(makeArrayMessage(1 + values.size())); // + 1 for OK simple string
+        sb.append(MakeCommandUtility.makeSimpleStrMessage("OK"));
+
+        for(int i = 0; i < values.size(); i++) {
+            Object val = values.get(i);
+            if(val.getClass() == Integer.class) {
+                sb.append(MakeCommandUtility.makeIntegerMessage((Integer)val));
+            }
+            else if(val.getClass() == String.class) {
+                sb.append(MakeCommandUtility.makeBinaryMessage((String) val));
+            }
+        }
 
         return sb.toString();
     }
@@ -115,7 +136,7 @@ public class MakeCommandUtility {
 
     public static String makeBinaryMessage(String str) {
         int length = str.length();
-        StringBuilder sb = new StringBuilder(length + 6);
+        StringBuilder sb = new StringBuilder();
 
         sb.append("$" + length + "\r\n");
         sb.append(str + "\r\n");
