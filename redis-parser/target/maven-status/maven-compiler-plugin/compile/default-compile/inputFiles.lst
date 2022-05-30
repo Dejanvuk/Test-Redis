@@ -1,5 +1,6 @@
 C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\exceptions\InvalidMsgException.java
 C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\types\MsgType.java
 C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\Parser.java
+C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\MakeCommandUtility.java
 C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\Message.java
 C:\Users\a-dvukovic\Desktop\Projects\Redis\redis-parser\src\main\java\com\dejanvuk\parser\types\DataType.java

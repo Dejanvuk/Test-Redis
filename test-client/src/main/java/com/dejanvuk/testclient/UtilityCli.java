@@ -5,6 +5,7 @@ package com.dejanvuk.testclient;
     ====================
     */
 
+import com.dejanvuk.parser.MakeCommandUtility;
 import com.dejanvuk.parser.types.MsgType;
 
 import java.io.IOException;
@@ -93,6 +94,24 @@ public class UtilityCli {
         //Just for testing purposes
         System.out.println(command + " " + key);
 
+        // 1d: make the command
+
+        String response = "";
+
+        if(command.equals(MsgType.SET)) {
+            response = MakeCommandUtility.makeSetMessage(key, values.get(0)); // remove get(O) for arrays
+        }
+        else if(command.equals(MsgType.GET)) {
+            response = MakeCommandUtility.makeGetMessage(key);
+        }
+        else if(command.equals(MsgType.DELETE)) {
+            response = MakeCommandUtility.makeDeleteMessage(key);
+        }
+
+        // send the command to the server
+        sendMessage(response);
+
+        System.out.println("Sent the command to the server!");
     }
 
     /**

@@ -63,7 +63,7 @@ public class HandleClientThread implements Runnable{
                 MsgType msgType = message.msgType;
 
                 if(!messages.get(0).dataType.equals(DataType.BULK_STR)) {
-                    response = parser.makeErrorMessage("ERROR:","First message is always an array!");
+                    response = MakeCommandUtility.makeErrorMessage("ERROR:","First message is always an array!");
                 }
                 else if(msgType == null || message.dataType == DataType.ERROR) {
                     /**
@@ -74,7 +74,7 @@ public class HandleClientThread implements Runnable{
                      * S: *2\r\n
                      * S: -{ERROR} {exception as string}\r\n
                      */
-                    response = parser.makeErrorMessage("ERROR:","Invalid message received, please see the --help for guidance!");
+                    response = MakeCommandUtility.makeErrorMessage("ERROR:","Invalid message received, please see the --help for guidance!");
                 }
                 else if(msgType == MsgType.SET) {
                     response = processSetMsg(messages);
@@ -139,7 +139,7 @@ public class HandleClientThread implements Runnable{
         db.put((String)messages.get(1).data[0], valueList);
 
         // send an OK message back
-        return parser.makeOkMessage();
+        return MakeCommandUtility.makeOkMessage();
     }
 
     /**
@@ -184,7 +184,7 @@ public class HandleClientThread implements Runnable{
         db.remove((String)messages.get(1).data[0]);
 
         // send an OK message back
-        return parser.makeOkMessage();
+        return MakeCommandUtility.makeOkMessage();
     }
 
     /**

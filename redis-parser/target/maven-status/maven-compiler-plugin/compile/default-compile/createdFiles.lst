@@ -1,6 +1,7 @@
-com\dejanvuk\parser\exceptions\InvalidMsgException.class
 com\dejanvuk\parser\Message.class
 com\dejanvuk\parser\types\DataType.class
+com\dejanvuk\parser\MakeCommandUtility.class
+com\dejanvuk\parser\types\MsgType.class
+com\dejanvuk\parser\exceptions\InvalidMsgException.class
 com\dejanvuk\parser\Message$MessageBuilder.class
 com\dejanvuk\parser\Parser.class
-com\dejanvuk\parser\types\MsgType.class

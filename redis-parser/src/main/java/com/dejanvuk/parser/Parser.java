@@ -37,19 +37,19 @@ public class Parser {
 
         StringBuilder sb = new StringBuilder(length + 6);
 
-        sb.append(makeArrayMessage(length + 1)); // 1 extra for the Ok simple string
-        sb.append(makeSimpleStrMessage("OK"));
+        sb.append(MakeCommandUtility.makeArrayMessage(length + 1)); // 1 extra for the Ok simple string
+        sb.append(MakeCommandUtility.makeSimpleStrMessage("OK"));
         for(int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
 
             if(message.dataType == DataType.INTEGER) {
-                sb.append(makeIntegerMessage((Integer)message.data[0]));
+                sb.append(MakeCommandUtility.makeIntegerMessage((Integer)message.data[0]));
             }
             else if(message.dataType == DataType.SIMPLE_STR) {
-                sb.append(makeSimpleStrMessage((String) message.data[0]));
+                sb.append(MakeCommandUtility.makeSimpleStrMessage((String) message.data[0]));
             }
             else if(message.dataType == DataType.BULK_STR) {
-                sb.append(makeBinaryMessage((String) message.data[0]));
+                sb.append(MakeCommandUtility.makeBinaryMessage((String) message.data[0]));
             }
         }
 
@@ -189,113 +189,6 @@ public class Parser {
         in.skipBytes(1); // skip CLRF, only \n left to skip
 
         return result;
-    }
-
-    /* ====================
-    Methods to convert the message to string
-    ====================
-    */
-    public String makeIntegerMessage(int nr) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(":" + nr + "\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeSimpleStrMessage(String str) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("+" + str + "\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeOkMessage() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(makeArrayMessage(1));
-        sb.append("+OK\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeErrorMessage(String error, String exception) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(makeArrayMessage(1));
-        sb.append("-" + error + " " + exception + "\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeNullMessage() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("$-1\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeArrayMessage(int length) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("*" + length + "\r\n");
-
-        return sb.toString();
-    }
-
-    public String makeBinaryMessage(String str) {
-        int length = str.length();
-        StringBuilder sb = new StringBuilder(length + 6);
-
-        sb.append("$" + length + "\r\n");
-        sb.append(str + "\r\n");
-
-        return sb.toString();
-    }
-
-    /**
-     * Exposed for clients to use
-     * @param key
-     * @param val
-     * @return
-     */
-    // TO-DO: Move to a separate class and expose this as an interface
-    public String makeSetMessage(String key, Object val) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(makeArrayMessage(3));
-        sb.append(makeBinaryMessage("SET"));
-        sb.append(makeBinaryMessage(key));
-        if(val.getClass() == Integer.class) {
-            sb.append(makeIntegerMessage((Integer) val));
-        }
-        else if(val.getClass() == String.class) {
-            sb.append(makeBinaryMessage((String) val));
-        }
-
-        return sb.toString();
-    }
-    // TO-DO: Add support for array
-    //public String makeSetMessage(String key, List<Object> values) {}
-
-    public String makeGetMessage(String key) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(makeArrayMessage(2));
-        sb.append(makeBinaryMessage("GET"));
-        sb.append(sb.append(makeBinaryMessage(key)));
-
-        return sb.toString();
-    }
-
-    public String makeDeleteMessage(String key) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(makeArrayMessage(2));
-        sb.append(makeBinaryMessage("DELETE"));
-        sb.append(sb.append(makeBinaryMessage(key)));
-
-        return sb.toString();
     }
 
     /* ====================

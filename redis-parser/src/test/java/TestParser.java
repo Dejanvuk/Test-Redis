@@ -1,3 +1,4 @@
+import com.dejanvuk.parser.MakeCommandUtility;
 import com.dejanvuk.parser.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,10 @@ public class TestParser {
 
     @Test
     public void setTest() {
-        String setIntegerTest1 = parser.makeSetMessage("abcd", 123456);
+        String setIntegerTest1 = MakeCommandUtility.makeSetMessage("abcd", 123456);
         assertEquals(setIntegerTest1, "*3\r\n$3\r\nSET\r\n$4\r\nabcd\r\n:123456\r\n");
 
-        String setStringTest1 = parser.makeSetMessage("abcd", "message");
+        String setStringTest1 = MakeCommandUtility.makeSetMessage("abcd", "message");
         assertEquals(setStringTest1, "*3\r\n$3\r\nSET\r\n$4\r\nabcd\r\n$7\r\nmessage\r\n");
 
         Object[] arr= new Object[3];
