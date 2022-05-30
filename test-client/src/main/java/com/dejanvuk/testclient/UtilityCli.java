@@ -36,7 +36,9 @@ public class UtilityCli {
     public void processCommand(String line) {
         // TO-DO: Needs more validation testing for bad input
         // TO-DO: Add support for array
-        // TO-DO: Remove white lines str.replaceAll("\\s","");
+
+        line = line.replaceAll("\\s","");//Remove white lines str.replaceAll("\\s","");
+
         StringBuilder commandBuilder = new StringBuilder(); String command = "";
         StringBuilder keyBuilder = new StringBuilder(); String key = "";
         StringBuilder valueBuilder = new StringBuilder();
@@ -62,8 +64,8 @@ public class UtilityCli {
         }
 
         // 1b: read the keyBuilder
-        while(i < line.length() && line.charAt(i) != '"') {
-            keyBuilder.append(line.charAt(i++));
+        while(i < line.length() && line.charAt(++i) != '"') {
+            keyBuilder.append(line.charAt(i));
         }
 
         key = keyBuilder.toString();
@@ -72,13 +74,16 @@ public class UtilityCli {
             System.out.println("Incorrect command: missing , after keyBuilder");
             return;
         }
-
+        else {
+            i++; // skip the ','
+        }
         // 1c: read the value/values for arrays
         boolean isInteger = false;
         while(i < line.length()) {
-            if(line.charAt(i++) == ')' ||
-                    (isInteger == false && line.charAt(i++) == '"') || // string value ended
-                    (isInteger == true && line.charAt(i) == ',')) { // integer value ended
+            char curr = line.charAt(i++);
+            if(curr == ')' ||
+                    (isInteger == false && curr == '"') || // string value ended
+                    (isInteger == true && curr == ',')) { // integer value ended
                 if(isInteger) {
                     values.add(Integer. valueOf(valueBuilder.toString()));
                 }
@@ -88,7 +93,7 @@ public class UtilityCli {
                 }
                 valueBuilder = new StringBuilder();
             }
-            valueBuilder.append(line.charAt(i));
+            valueBuilder.append(curr);
         }
 
         //Just for testing purposes
