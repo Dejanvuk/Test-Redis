@@ -1,5 +1,7 @@
 package com.dejanvuk.parser;
 
+import java.util.List;
+
 /**
  * Utility class to make commands
  */
@@ -19,7 +21,24 @@ public class MakeCommandUtility {
         return sb.toString();
     }
     // TO-DO: Add support for array
-    //public String makeSetMessage(String key, List<Object> values) {}
+    public static String makeSetMessage(String key, List<Object> values) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(makeArrayMessage(3));
+        sb.append(makeBinaryMessage("SET"));
+        sb.append(makeBinaryMessage(key));
+        for(int i = 0 ; i < values.size(); i++) {
+            Object val = values.get(i);
+
+            if(val.getClass() == Integer.class) {
+                sb.append(makeIntegerMessage((Integer) val));
+            }
+            else if(val.getClass() == String.class) {
+                sb.append(makeBinaryMessage((String) val));
+            }
+        }
+
+        return sb.toString();
+    }
 
     public static String makeGetMessage(String key) {
         StringBuilder sb = new StringBuilder();

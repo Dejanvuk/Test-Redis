@@ -2,6 +2,7 @@ package com.dejanvuk.testclient;
 
 import com.dejanvuk.parser.Message;
 import com.dejanvuk.parser.Parser;
+import com.dejanvuk.parser.PrintUtility;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -45,7 +46,8 @@ public class HandleServerCommunicationThread implements Runnable{
             List<Message> messages = new ArrayList<>();
             try {
                 parser.readData(messages);
-                System.out.println("read messages");
+                System.out.print("Message received and parsed: ");
+                PrintUtility.printMessage(messages);
             } catch (IOException e) {
                 e.printStackTrace();
             }

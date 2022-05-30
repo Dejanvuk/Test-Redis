@@ -6,15 +6,15 @@ package com.dejanvuk.testclient;
     */
 
 import com.dejanvuk.parser.MakeCommandUtility;
+import com.dejanvuk.parser.Message;
+import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UtilityCli {
     private OutputStreamWriter out = null;
@@ -44,11 +44,11 @@ public class UtilityCli {
 
         int i = 0;
         // 1a:read the commandBuilder
-        while(i < line.length() && line.charAt(i++) != '(') {
-            commandBuilder.append(line.charAt(i));
+        while(i < line.length() && line.charAt(i) != '(') {
+            commandBuilder.append(line.charAt(i++));
         }
 
-        command = commandBuilder.toString();
+        command = commandBuilder.toString().toUpperCase(Locale.ROOT);
 
         // if commandBuilder not found print the error and exit immediately
         if(!isCommandValid(command)) {
@@ -56,19 +56,19 @@ public class UtilityCli {
             return;
         }
 
-        if(line.charAt(i) != '"') {
+        if(line.charAt(++i) != '"') {
             System.out.println("Incorrect command: missing \" ");
             return;
         }
 
         // 1b: read the keyBuilder
-        while(i < line.length() && line.charAt(i++) != '"') {
-            keyBuilder.append(line.charAt(i));
+        while(i < line.length() && line.charAt(i) != '"') {
+            keyBuilder.append(line.charAt(i++));
         }
 
         key = keyBuilder.toString();
 
-        if(line.charAt(i) != ',') {
+        if(line.charAt(++i) != ',') {
             System.out.println("Incorrect command: missing , after keyBuilder");
             return;
         }
@@ -99,7 +99,7 @@ public class UtilityCli {
         String response = "";
 
         if(command.equals(MsgType.SET)) {
-            response = MakeCommandUtility.makeSetMessage(key, values.get(0)); // remove get(O) for arrays
+            response = MakeCommandUtility.makeSetMessage(key, values); // remove get(O) for arrays
         }
         else if(command.equals(MsgType.GET)) {
             response = MakeCommandUtility.makeGetMessage(key);

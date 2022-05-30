@@ -16,12 +16,6 @@ public class Client {
         UtilityCli utilityCli = null;
 
         try {
-            utilityCli = new UtilityCli(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
             socket = new Socket("localhost", 6379);
             // make a new thread to read the input from the server
             Thread serverThread = new Thread(new HandleServerCommunicationThread(socket));
@@ -29,6 +23,12 @@ public class Client {
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            utilityCli = new UtilityCli(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }
