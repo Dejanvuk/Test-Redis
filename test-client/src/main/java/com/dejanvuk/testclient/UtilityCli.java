@@ -38,7 +38,7 @@ public class UtilityCli {
         // TO-DO: Add support for array
 
         line = line.replaceAll("\\s","");// Remove white lines , just to be sure
-
+        // TO-DO: Basic paranthesis check
         StringBuilder commandBuilder = new StringBuilder(); String command = "";
         StringBuilder keyBuilder = new StringBuilder(); String key = "";
         StringBuilder valueBuilder = new StringBuilder();
@@ -58,6 +58,8 @@ public class UtilityCli {
             System.out.println("Command doesnt exist! ");
             return;
         }
+
+        // TO-DO: test that ( exists before
 
         if(line.charAt(++i) != '"') {
             System.out.println("Incorrect command: missing \" ");
@@ -79,7 +81,7 @@ public class UtilityCli {
                 return;
             }
             else {
-                i++; // skip the ','
+                i++; // skip the ',' , TO-DO: Test that , is present
             }
             // 1c: read the value/values for arrays
             boolean isInteger = true;
@@ -107,6 +109,30 @@ public class UtilityCli {
         }
         else if(command.equals(MsgType.DELETE.name())) {
             response = MakeCommandUtility.makeDeleteMessage(key);
+        }
+
+        else if(command.equals(MsgType.DELETE.name())) {
+            // read the new key name SET("old-key-name", "new-key-name");
+            if(line.charAt(i++) != '"') {
+                System.out.println("Incorrect command: missing \" before the new key's name");
+                return;
+            }
+
+            StringBuilder newKeyName = new StringBuilder();
+            while(i < line.length() - 2) { // - 2 = '"' , -1 = ')'
+                newKeyName.append(line.charAt(i++));
+            }
+            if(line.charAt(i++) != '"') {
+                System.out.println("Incorrect command: missing \" after the new key's name");
+                return;
+            }
+
+            if(line.charAt(i) != '"') {
+                System.out.println("Incorrect command: expected ) at the end of the new key's name");
+                return;
+            }
+
+            response = MakeCommandUtility.makeRenameMessage(key, newKeyName.toString());
         }
 
         //Just for testing purposes

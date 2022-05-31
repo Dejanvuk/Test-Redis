@@ -62,6 +62,17 @@ public class MakeCommandUtility {
         return sb.toString();
     }
 
+    public static String makeRenameMessage(String oldKey, String newKey) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(makeArrayMessage(3));
+        sb.append(makeBinaryMessage("RENAME"));
+        sb.append(makeBinaryMessage(oldKey));
+        sb.append(makeBinaryMessage(newKey));
+
+        return sb.toString();
+    }
+
     /* ====================
     Methods to convert the message to string
     ====================

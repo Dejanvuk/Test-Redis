@@ -5,6 +5,10 @@
 * LRU cache
 * parser
 
+___
+## Current features:
+* 
+
 # The protocol and a couple of message examples, by default UTF-8
 [Redis Protocol](https://redis.io/docs/reference/protocol-spec/)
 #### Client requests for **SET("abcd", 123456)**
