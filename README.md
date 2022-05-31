@@ -7,7 +7,7 @@
 
 ___
 ## Current features:
-* 
+* Support for GET,SET,DELETE,RENAME commands
 
 # The protocol and a couple of message examples, by default UTF-8
 [Redis Protocol](https://redis.io/docs/reference/protocol-spec/)
@@ -80,7 +80,7 @@ Needless to say, the Redis app uses the 3rd way which is the most efficient in t
 ___
 ## EXTRA TO-DO's:
 - [x] Create the CLI
-- [x] Add support for arrays with different data types, for example arrays of strings and integers
+- [x] Add support for arrays with different data types, for example arrays of strings and integers (Partial, only parser support is missing)
 - [ ] Add support for nested arrays
 - [x] Add support for RENAME
 - [ ] Add support for MSET and MGET
