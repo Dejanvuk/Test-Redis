@@ -75,10 +75,17 @@ S: -{ERROR} {exception as bulk string}\r\n
 Needless to say, the Redis app uses the 3rd way which is the most efficient in this case.
 ___
 ## EXTRA TO-DO's:
+- [x] Create the CLI
 - [x] Add support for arrays with different data types, for example arrays of strings and integers
-- [ ] Add support for nested data types, for example nested arrays
+- [ ] Add support for nested arrays
+- [ ] Add support for RENAME
 - [ ] Add support for MSET and MGET
-- [ ] Add LRU cache support
+- [ ] Add support for the data types: Sets&Sorted Sets and Hashes
+- [ ] Add LRU support
+- [ ] Add LFU support
+- [ ] Add support for keys with limited time to live
+- [ ] Add support for multiple databases
+- [ ] Read configurations from redis.conf or from remote repository
 - [ ] Add serializer/deserializer to persist data on disk if needed
 - [ ] Add support for multiple commands aka pipelining
 - [ ] Port the sdk interface to JS/TS and default to HTTP if websockets are not enabled in the browser
