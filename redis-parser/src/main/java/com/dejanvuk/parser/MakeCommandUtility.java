@@ -57,7 +57,7 @@ public class MakeCommandUtility {
 
         sb.append(makeArrayMessage(2));
         sb.append(makeBinaryMessage("DELETE"));
-        sb.append(sb.append(makeBinaryMessage(key)));
+        sb.append(makeBinaryMessage(key));
 
         return sb.toString();
     }

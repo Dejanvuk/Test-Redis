@@ -169,10 +169,17 @@ public class HandleClientThread implements Runnable{
 
         // starting the get from 0 cause we store only the contents of the msg
         // check the processSetMsg above
-        List<Object> valueList = db.get((String)messages.get(1).data);
+        String key = (String)messages.get(1).data;
 
-        // send an OK message back along with the data
-        return MakeCommandUtility.makeOkMessageWithData(valueList);
+        if(db.containsKey(key)) {
+            List<Object> valueList = db.get(key);
+
+            // send an OK message back along with the data
+            return MakeCommandUtility.makeOkMessageWithData(valueList);
+        }
+        else {
+            return MakeCommandUtility.makeErrorMessage("GET ERROR", "Key not found!");
+        }
     }
 
     /**
@@ -190,10 +197,14 @@ public class HandleClientThread implements Runnable{
         C: $4\r\n  1
         C: abcd\r\n
         */
-        db.remove((String)messages.get(1).data);
-
-        // send an OK message back
-        return MakeCommandUtility.makeOkMessage();
+        String key = (String)messages.get(1).data;
+        if(db.containsKey(key)) {
+            db.remove((String)messages.get(1).data);
+            return MakeCommandUtility.makeOkMessage(); // send an OK message back
+        }
+        else {
+            return MakeCommandUtility.makeErrorMessage("DELETE ERROR", "Key not found!");
+        }
     }
 
     /**
