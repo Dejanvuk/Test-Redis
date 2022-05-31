@@ -88,6 +88,9 @@ public class HandleClientThread implements Runnable{
                 else if(msgType == MsgType.DELETE) {
                     response = processDeleteMsg(messages);
                 }
+                else if(msgType == MsgType.RENAME) {
+                    response = processRenameMsg(messages);
+                }
 
                 // 4th: write the message back to the client
                 sendMessage(response);
@@ -203,7 +206,30 @@ public class HandleClientThread implements Runnable{
             return MakeCommandUtility.makeOkMessage(); // send an OK message back
         }
         else {
-            return MakeCommandUtility.makeErrorMessage("DELETE ERROR", "Key not found!");
+            return MakeCommandUtility.makeErrorMessage("DELETE ERROR", "Key "  + key + "not found!");
+        }
+    }
+
+    public String processRenameMsg(List<Message> messages){
+        System.out.println("PROCESSING RENAME MESSAGE");
+        /*
+        #### Client requests for **DELETE("abcd")**
+        C: $6\r\n 0
+        C: RENAME\r\n
+        C: $6\r\n  1
+        C: oldkey\r\n
+        C: $6\r\n  2
+        C: newkey\r\n
+        */
+        String oldKey = (String)messages.get(1).data;
+        String newkey = (String)messages.get(2).data;
+        if(db.containsKey(oldKey)) {
+            // cannot rename the key once created, so delete and recreate
+            db.put(newkey, db.remove((String)messages.get(1).data););
+            return MakeCommandUtility.makeOkMessage(); // send an OK message back
+        }
+        else {
+            return MakeCommandUtility.makeErrorMessage("RENAME ERROR", "Key " + oldKey + "not found!");
         }
     }
 
