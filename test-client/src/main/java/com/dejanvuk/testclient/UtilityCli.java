@@ -73,6 +73,11 @@ public class UtilityCli {
 
         key = keyBuilder.toString();
 
+        if(line.charAt(i) != '"') {
+            System.out.println("Incorrect command: missing \" before the new key's name");
+            return;
+        }
+
 
         // only for SET,MSET,MGET command
         if(command.equals(MsgType.SET.name())) {
@@ -91,7 +96,7 @@ public class UtilityCli {
                         (isInteger == false && curr == '"') || // string value ended
                         (isInteger == true && curr == ',')) { // integer value ended
                     if(isInteger) {
-                        values.add(Integer. valueOf(valueBuilder.toString()));
+                        values.add(Integer.valueOf(valueBuilder.toString()));
                     }
                     else { // string
                         values.add(valueBuilder.toString());
@@ -111,8 +116,16 @@ public class UtilityCli {
             response = MakeCommandUtility.makeDeleteMessage(key);
         }
 
-        else if(command.equals(MsgType.DELETE.name())) {
+        else if(command.equals(MsgType.RENAME.name())) {
             // read the new key name SET("old-key-name", "new-key-name");
+            if(line.charAt(++i) != ',') {
+                System.out.println("Incorrect command: missing , after keyBuilder");
+                return;
+            }
+            else {
+                i++; // skip the ',' , TO-DO: Test that , is present
+            }
+
             if(line.charAt(i++) != '"') {
                 System.out.println("Incorrect command: missing \" before the new key's name");
                 return;
@@ -127,7 +140,7 @@ public class UtilityCli {
                 return;
             }
 
-            if(line.charAt(i) != '"') {
+            if(line.charAt(i) != ')') {
                 System.out.println("Incorrect command: expected ) at the end of the new key's name");
                 return;
             }
@@ -137,6 +150,7 @@ public class UtilityCli {
 
         //Just for testing purposes
         System.out.println(command + " " + key);
+        //System.out.println(response);
 
         // send the command to the server
         sendMessage(response);

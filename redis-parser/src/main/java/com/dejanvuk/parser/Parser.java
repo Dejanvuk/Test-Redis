@@ -91,6 +91,9 @@ public class Parser {
         else if(data.equals("DELETE")) {
             message.msgType = MsgType.DELETE;
         }
+        else if(data.equals("RENAME")) {
+            message.msgType = MsgType.RENAME;
+        }
         messages.add(message);
     }
 

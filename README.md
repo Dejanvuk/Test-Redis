@@ -82,7 +82,7 @@ ___
 - [x] Create the CLI
 - [x] Add support for arrays with different data types, for example arrays of strings and integers
 - [ ] Add support for nested arrays
-- [ ] Add support for RENAME
+- [x] Add support for RENAME
 - [ ] Add support for MSET and MGET
 - [ ] Add support for the data types: Sets&Sorted Sets and Hashes
 - [ ] Add LRU support

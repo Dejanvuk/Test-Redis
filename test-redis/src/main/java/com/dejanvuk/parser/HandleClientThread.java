@@ -225,7 +225,7 @@ public class HandleClientThread implements Runnable{
         String newkey = (String)messages.get(2).data;
         if(db.containsKey(oldKey)) {
             // cannot rename the key once created, so delete and recreate
-            db.put(newkey, db.remove((String)messages.get(1).data););
+            db.put(newkey, db.remove(oldKey));
             return MakeCommandUtility.makeOkMessage(); // send an OK message back
         }
         else {
