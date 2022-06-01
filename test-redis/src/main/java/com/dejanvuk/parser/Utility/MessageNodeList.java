@@ -205,4 +205,18 @@ public class MessageNodeList {
             }
         }
     }
+
+    public void printKeys() {
+        MessageNode curr = head;
+
+        if(size == 0) {
+            System.out.println("List is empty!");
+            return;
+        }
+
+        for(int i = 1 ; i <= size; i++) {
+            System.out.println(curr.key);
+            curr = curr.next;
+        }
+    }
 }
