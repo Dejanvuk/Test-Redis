@@ -85,7 +85,7 @@ ___
 - [x] Add support for RENAME
 - [ ] Add support for MSET and MGET
 - [ ] Add support for the data types: Sets&Sorted Sets and Hashes
-- [ ] Add LRU support
+- [x] Add LRU support
 - [ ] Add LFU support
 - [ ] Add support for keys with limited time to live
 - [ ] Add support for multiple databases

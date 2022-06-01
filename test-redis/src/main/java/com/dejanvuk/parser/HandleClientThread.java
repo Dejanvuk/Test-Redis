@@ -1,5 +1,7 @@
 package com.dejanvuk.parser;
 
+import com.dejanvuk.parser.Utility.MessageNodeList;
+import com.dejanvuk.parser.Utility.Value;
 import com.dejanvuk.parser.exceptions.InvalidMsgException;
 import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
@@ -19,11 +21,12 @@ public class HandleClientThread implements Runnable{
     private DataInputStream in = null;
     private OutputStreamWriter out = null;
     private Parser parser = null;
-    Map<String, List<Object>> db = new HashMap<>(); // in-memory db
-
+    Map<String, Value> db = new HashMap<>(); // in-memory db
+    MessageNodeList messageNodeList = null;
 
     public HandleClientThread(Socket socket) {
         this.socket = socket;
+        this.messageNodeList = new MessageNodeList(3, db);
     }
 
     @Override
@@ -148,7 +151,8 @@ public class HandleClientThread implements Runnable{
             valueList.add(messages.get(i).data);
         }
 
-        db.put((String)messages.get(1).data, valueList);
+        Value value = new Value(valueList);
+        db.put((String)messages.get(1).data, value);
 
         // send an OK message back
         return MakeCommandUtility.makeOkMessage();
@@ -175,7 +179,10 @@ public class HandleClientThread implements Runnable{
         String key = (String)messages.get(1).data;
 
         if(db.containsKey(key)) {
-            List<Object> valueList = db.get(key);
+            List<Object> valueList = db.get(key).getValues();
+
+            // make the key the MRU
+
 
             // send an OK message back along with the data
             return MakeCommandUtility.makeOkMessageWithData(valueList);

@@ -1,5 +1,8 @@
 package com.dejanvuk.parser.Utility;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * This class is only used for LRU functionality
  * The actual values at a specific key are still stored in a hashmap for performance reasons
@@ -7,7 +10,56 @@ package com.dejanvuk.parser.Utility;
 public class MessageNodeList {
     private MessageNode head = null;
     private MessageNode tail = null;
-    private int size = 0;
+    private int size = 0; // current number of keys stored
+
+    // For LRU support
+    private int capacity = 1; // default max capacity
+    private MessageNode LRUNode = null;
+    private MessageNode MRUNode = null;
+    Map<String, Value> db = null;
+
+    public MessageNodeList(){
+        this.size = 0;
+        this.head = null;
+        this.tail = null;
+    }
+
+    public MessageNodeList(int capacity, Map<String, Value> db) {
+        this.capacity = capacity;
+        this.db = db;
+    }
+
+    /* --------- LRU METHODS--------- */
+
+    /**
+     * Updates the node list after a get command was processed in the main loop
+     * @param key
+     */
+    public void get(int key) {
+        // we dont have to check if the db contains the key in here,
+        // as we already check in the main loop that handles the get command before calling this method
+        MessageNode node = db.get(key).getMessageNode();
+        makeNodeMRU(node);
+    }
+
+    public void makeNodeMRU(MessageNode node) {
+        if(node == MRUNode) return;
+
+        node.next.prev = node.prev;
+
+        if(node != LRUNode) node.prev.next = node.next;
+        else LRUNode = node.next;
+
+        node.next = null;
+        node.prev = MRUNode;
+
+        MRUNode.next = node;
+
+        MRUNode = node;
+    }
+
+
+    /* --------- LRU METHODS--------- */
 
     public class MessageNode {
         String key;
@@ -17,12 +69,6 @@ public class MessageNodeList {
         public MessageNode(String key) {
             this.key = key;
         }
-    }
-
-    public MessageNodeList(){
-        this.size = 0;
-        this.head = null;
-        this.tail = null;
     }
 
     public int getSize(){
