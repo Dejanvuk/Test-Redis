@@ -215,7 +215,11 @@ public class HandleClientThread implements Runnable{
         */
         String key = (String)messages.get(1).data;
         if(db.containsKey(key)) {
-            db.remove((String)messages.get(1).data);
+            db.remove(key);
+
+            //Delete the Node in LRU List
+            messageNodeList.delete(key);
+
             return MakeCommandUtility.makeOkMessage(); // send an OK message back
         }
         else {
