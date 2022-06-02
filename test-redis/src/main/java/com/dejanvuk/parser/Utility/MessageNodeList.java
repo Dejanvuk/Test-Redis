@@ -79,8 +79,13 @@ public class MessageNodeList {
         }
     }
 
+    /**
+     * the key is already removed from the db map prior to this
+     * simply remove it from the DLL list with regards to MRU and LRU node
+     * @param key
+     */
     public void delete(String key) {
-        MessageNode curr = head;
+        MessageNode curr = LRUNode; // LRU node is always the head
 
         for(int i = 1 ; i <= size; i++) {
             if(curr.key == key) {
@@ -132,6 +137,14 @@ public class MessageNodeList {
         MessageNode next = null;
 
         public MessageNode(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
             this.key = key;
         }
     }

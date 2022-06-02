@@ -242,7 +242,12 @@ public class HandleClientThread implements Runnable{
         String newkey = (String)messages.get(2).data;
         if(db.containsKey(oldKey)) {
             // cannot rename the key once created, so delete and recreate
-            db.put(newkey, db.remove(oldKey));
+            Value oldValue = db.remove(oldKey);
+            oldValue.getMessageNode().setKey(newkey);
+            db.put(newkey, oldValue);
+
+            // we dont have to modify the LRU cache after as only the name of the key is changed
+
             return MakeCommandUtility.makeOkMessage(); // send an OK message back
         }
         else {
