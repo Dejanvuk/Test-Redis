@@ -13,13 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public class TestParser {
-    Parser parser = null;
-
+public class TestMakeCommandUtility {
     @BeforeEach
     public void setup() {
-        System.out.println("=============== Start of Parser Tests Setup ===============\n");
-        parser = new Parser(null);
+        System.out.println("=============== Start of MakeCommandUtility Tests Setup ===============\n");
     }
 
 
