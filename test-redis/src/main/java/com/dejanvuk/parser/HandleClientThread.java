@@ -151,8 +151,14 @@ public class HandleClientThread implements Runnable{
             valueList.add(messages.get(i).data);
         }
 
+        String key = (String)messages.get(1).data;
+
+        // create the MessageNode and perform the LRU put
+        MessageNodeList.MessageNode newNode = messageNodeList.put(key);
         Value value = new Value(valueList);
-        db.put((String)messages.get(1).data, value);
+        value.setMessageNode(newNode);
+
+        db.put(key, value);
 
         // send an OK message back
         return MakeCommandUtility.makeOkMessage();
@@ -182,7 +188,7 @@ public class HandleClientThread implements Runnable{
             List<Object> valueList = db.get(key).getValues();
 
             // make the key the MRU
-
+            messageNodeList.get(key);
 
             // send an OK message back along with the data
             return MakeCommandUtility.makeOkMessageWithData(valueList);

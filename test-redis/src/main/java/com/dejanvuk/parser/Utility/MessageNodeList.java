@@ -35,11 +35,76 @@ public class MessageNodeList {
      * Updates the node list after a get command was processed in the main loop
      * @param key
      */
-    public void get(int key) {
+    public void get(String key) {
         // we dont have to check if the db contains the key in here,
         // as we already check in the main loop that handles the get command before calling this method
         MessageNode node = db.get(key).getMessageNode();
         makeNodeMRU(node);
+    }
+
+    /**
+     * If size exceeds the capacity, removes the key from the db
+     * @param key
+     * @return
+     */
+    public MessageNode put(String key) {
+        if(db.containsKey(key)) {
+            MessageNode node = db.get(key).getMessageNode();
+            makeNodeMRU(node);
+            return node;
+        }
+        else { // new node, add it
+            MessageNode newNode = new MessageNode(key);
+            newNode.prev = MRUNode;
+
+            if(MRUNode == null) {
+                MRUNode = newNode;
+                LRUNode = newNode;
+            }
+            else {
+                MRUNode.next = newNode;
+                MRUNode = newNode;
+            }
+
+            // If size exceeds the capacity, removes the key from the db
+            if(size == capacity) { // evict the least recently used key
+                db.remove(LRUNode.key);
+                LRUNode = LRUNode.next;
+                LRUNode.prev = null;
+            }
+            else
+                size++;
+
+            return newNode;
+        }
+    }
+
+    public void delete(String key) {
+        MessageNode curr = head;
+
+        for(int i = 1 ; i <= size; i++) {
+            if(curr.key == key) {
+                if(i == 1) {
+                    // change the LRU
+                    LRUNode = LRUNode.next;
+                    LRUNode.prev = null;
+                }
+                else if (i == size) {
+                    // change the MRU
+                    MRUNode = MRUNode.prev;
+                    MRUNode.next = null;
+                }
+                else {
+                    curr.prev.next = curr.next;
+                    curr.next.prev = curr.prev;
+                }
+                size--;
+                return;
+            }
+            else {
+                curr = curr.next;
+            }
+        }
     }
 
     public void makeNodeMRU(MessageNode node) {
@@ -84,7 +149,7 @@ public class MessageNodeList {
      * @param key
      * @return
      */
-    public boolean containsMessage(String key) {
+    private boolean containsMessage(String key) {
         MessageNode node = head;
         for(int i = 0; i < size; i++){
             if(node.key.equals(key)){
@@ -100,7 +165,7 @@ public class MessageNodeList {
      * Insert new message at the head
      * @param key
      */
-    public void insertMessageFirst(String key) {
+    private void insertMessageFirst(String key) {
         MessageNode node = new MessageNode(key);
 
         if (head == null) {
@@ -115,7 +180,7 @@ public class MessageNodeList {
         size++;
     }
 
-    public void insertMessageLast(String key) {
+    private void insertMessageLast(String key) {
         MessageNode node = new MessageNode(key);
 
         if (tail == null) {
@@ -130,7 +195,7 @@ public class MessageNodeList {
         this.size++;
     }
 
-    public void insertMessageAt(String key, int position) {
+    private void insertMessageAt(String key, int position) {
         MessageNode curr = head;
 
         if(position > size) {
@@ -164,7 +229,7 @@ public class MessageNodeList {
         }
     }
 
-    public void removeFirstMessage() {
+    private void removeFirstMessage() {
         if(head != null){
             head = head.next;
             head.prev = null;
@@ -176,7 +241,7 @@ public class MessageNodeList {
         }
     }
 
-    public void removeLastMessage() {
+    private void removeLastMessage() {
         if(tail != null){
             tail = tail.prev;
             tail.next = null;
@@ -188,7 +253,7 @@ public class MessageNodeList {
         }
     }
 
-    public void removeMessageAt(int position) {
+    private void removeMessageAt(int position) {
         if(position > size) {
             System.out.println("Error removing message: Index exceeds the list's size!");
             return;
@@ -227,7 +292,7 @@ public class MessageNodeList {
      * first use the hashmap to check if the key exists
      * @param key
      */
-    public void removeMessageWithKey(String key) {
+    private void removeMessageWithKey(String key) {
         MessageNode curr = head;
 
         for(int i = 1 ; i <= size; i++) {
@@ -243,8 +308,8 @@ public class MessageNodeList {
                     curr.next.prev = curr.prev;
 
                     size--;
-                    return;
                 }
+                return;
             }
             else {
                 curr = curr.next;

@@ -87,7 +87,7 @@ ___
 - [ ] Add support for the data types: Sets&Sorted Sets and Hashes
 - [x] Add LRU support
 - [ ] Add LFU support
-- [ ] Add support for keys with limited time to live
+- [ ] Add support for keys with limited time to live (Partial, still thinking on the best approach to implement this to least affect the performance)
 - [ ] Add support for multiple databases
 - [ ] Read configurations from redis.conf or from remote repository
 - [ ] Add serializer/deserializer to persist data on disk if needed
