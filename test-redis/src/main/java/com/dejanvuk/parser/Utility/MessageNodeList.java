@@ -112,6 +112,10 @@ public class MessageNodeList {
         }
     }
 
+    public String getMRUKey() {
+        return MRUNode.key;
+    }
+
     public void makeNodeMRU(MessageNode node) {
         if(node == MRUNode) return;
 
