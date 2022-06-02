@@ -20,7 +20,7 @@ public class TestParser {
 
 
     @Test
-    public void setTest() {
+    public void makeSetMessageTest() {
         String setIntegerTest1 = MakeCommandUtility.makeSetMessage("abcd", 123456);
         assertEquals(setIntegerTest1, "*3\r\n$3\r\nSET\r\n$4\r\nabcd\r\n:123456\r\n");
 
@@ -31,4 +31,23 @@ public class TestParser {
 
 
     }
+
+    @Test
+    public void makeGetMessageTest() {
+        String getTest1 = MakeCommandUtility.makeGetMessage("abc");
+        assertEquals(getTest1, "*2\r\n$3\r\nGET\r\n$3\r\nabc\r\n");
+    }
+
+    @Test
+    public void makeDeleteMessageTest() {
+        String deleteTest1 = MakeCommandUtility.makeDeleteMessage("abc");
+        assertEquals(deleteTest1, "*2\r\n$6\r\nDELETE\r\n$3\r\nabc\r\n");
+    }
+
+    @Test
+    public void makeRenameMessageTest() {
+        String renameTest1 = MakeCommandUtility.makeRenameMessage("oldKey","newKey");
+        assertEquals(renameTest1, "*3\r\n$6\r\nRENAME\r\n$6\r\noldKey\r\n$6\r\nnewKey\r\n");
+    }
+
 }
