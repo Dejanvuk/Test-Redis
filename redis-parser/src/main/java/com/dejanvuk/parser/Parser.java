@@ -139,7 +139,7 @@ public class Parser {
         }
     }
 
-    // TO-DO: Test this method
+    // TODO: Test this method
     public int readInteger() throws IOException {
         int result = 0;
 

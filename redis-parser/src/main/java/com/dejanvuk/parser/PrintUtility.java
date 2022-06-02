@@ -46,7 +46,7 @@ public class PrintUtility {
         System.out.println(sb.toString());
     }
 
-    // TO-DO: Not yet needed :)
+    // TODO: Not yet needed :)
     /**
      * Prints the whole database
      */

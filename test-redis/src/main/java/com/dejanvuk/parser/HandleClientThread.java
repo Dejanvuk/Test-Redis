@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HandleClientThread implements Runnable{
-    private final Socket socket; // TO-DO: Handle different socket states and add a conditional to close it
+    private final Socket socket; // TODO: Handle different socket states and add a conditional to close it
     private DataInputStream in = null;
     private OutputStreamWriter out = null;
     private Parser parser = null;
@@ -106,7 +106,7 @@ public class HandleClientThread implements Runnable{
                 }
             } catch (InvalidMsgException e) {
                 e.printStackTrace();
-                // TO-DO: Send client an error message
+                // TODO: Send client an error message
             }
         }
 

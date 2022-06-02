@@ -7,7 +7,7 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
-        final int port = 6379; // TO-DO: custom port read from file or system env
+        final int port = 6379; // TODO: custom port read from file or system env
 
         System.out.println("========================" +
                 "" +
@@ -27,10 +27,10 @@ public class Server {
         }
 
         // main loop, listen for incoming clients
-        // TO-DO: replace true with a conditional
+        // TODO: replace true with a conditional
         while(true) {
             try {
-                Socket socket = serverSocket.accept(); // TO-DO: Encapsulate the socket and store it to close it at will when needed
+                Socket socket = serverSocket.accept(); // TODO: Encapsulate the socket and store it to close it at will when needed
 
                 System.out.println("New client received: " + socket.getRemoteSocketAddress().toString());
 

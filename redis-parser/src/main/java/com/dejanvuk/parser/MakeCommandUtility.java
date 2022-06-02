@@ -22,7 +22,7 @@ public class MakeCommandUtility {
 
         return sb.toString();
     }
-    // TO-DO: Add support for array
+    // TODO: Add support for array
     public static String makeSetMessage(String key, List<Object> values) {
         StringBuilder sb = new StringBuilder();
         sb.append(makeArrayMessage(2 + values.size()));

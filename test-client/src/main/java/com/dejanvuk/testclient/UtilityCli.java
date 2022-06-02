@@ -34,11 +34,11 @@ public class UtilityCli {
      * @param line
      */
     public void processCommand(String line) {
-        // TO-DO: Needs more validation testing for bad input
-        // TO-DO: Add support for array
+        // TODO: Needs more validation testing for bad input
+        // TODO: Add support for array
 
         line = line.replaceAll("\\s","");// Remove white lines , just to be sure
-        // TO-DO: Basic paranthesis check
+        // TODO: Basic paranthesis check
         StringBuilder commandBuilder = new StringBuilder(); String command = "";
         StringBuilder keyBuilder = new StringBuilder(); String key = "";
         StringBuilder valueBuilder = new StringBuilder();
@@ -59,7 +59,7 @@ public class UtilityCli {
             return;
         }
 
-        // TO-DO: test that ( exists before
+        // TODO: test that ( exists before
 
         if(line.charAt(++i) != '"') {
             System.out.println("Incorrect command: missing \" ");
@@ -86,7 +86,7 @@ public class UtilityCli {
                 return;
             }
             else {
-                i++; // skip the ',' , TO-DO: Test that , is present
+                i++; // skip the ',' , TODO: Test that , is present
             }
             // 1c: read the value/values for arrays
             boolean isInteger = true;
@@ -123,7 +123,7 @@ public class UtilityCli {
                 return;
             }
             else {
-                i++; // skip the ',' , TO-DO: Test that , is present
+                i++; // skip the ',' , TODO: Test that , is present
             }
 
             if(line.charAt(i++) != '"') {
