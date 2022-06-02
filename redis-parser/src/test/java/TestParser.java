@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,6 +34,14 @@ public class TestParser {
         Object[] arr= new Object[3];
 
 
+        Integer[] integerArray = new Integer[] {1,22,333};
+        List<Object> integerList = Arrays.asList(integerArray);
+        String setiNTEGERTest2 = MakeCommandUtility.makeSetMessage("abcd", integerList);
+        assertEquals(setiNTEGERTest2, "*5\r\n$3\r\nSET\r\n$4\r\nabcd\r\n:1\r\n:22\r\n:333\r\n");
+
+
+
+
     }
 
     @Test
@@ -49,5 +61,8 @@ public class TestParser {
         String renameTest1 = MakeCommandUtility.makeRenameMessage("oldKey","newKey");
         assertEquals(renameTest1, "*3\r\n$6\r\nRENAME\r\n$6\r\noldKey\r\n$6\r\nnewKey\r\n");
     }
+
+
+
 
 }

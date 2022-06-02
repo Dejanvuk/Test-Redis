@@ -25,7 +25,7 @@ public class MakeCommandUtility {
     // TO-DO: Add support for array
     public static String makeSetMessage(String key, List<Object> values) {
         StringBuilder sb = new StringBuilder();
-        sb.append(makeArrayMessage(3));
+        sb.append(makeArrayMessage(2 + values.size()));
         sb.append(makeBinaryMessage("SET"));
         sb.append(makeBinaryMessage(key));
         for(int i = 0 ; i < values.size(); i++) {
