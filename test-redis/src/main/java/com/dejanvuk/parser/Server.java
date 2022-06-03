@@ -3,10 +3,12 @@ package com.dejanvuk.parser;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server {
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
+        Scanner scanner = new Scanner(System.in);
         final int port = 6379; // TODO: custom port read from file or system env
 
         System.out.println("========================" +
@@ -27,10 +29,25 @@ public class Server {
         }
 
         // main loop, listen for incoming clients
-        // TODO: replace true with a conditional
         while(true) {
+            String userInput = scanner.nextLine();
+
+            if(userInput.equals("quit")) {
+                System.out.println("Shutting down...");
+                // clean up
+                // Note: System.in is opened by JVM. Hence, it's the responsibility of JVM to close the same
+                try {
+                    serverSocket.close(); // Not necessary as it's closed by OS, but it's good practice
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Shut down successfully!");
+                System.exit(0);
+            }
+
             try {
-                Socket socket = serverSocket.accept(); // TODO: Encapsulate the socket and store it to close it at will when needed
+                // TODO: Encapsulate the socket and store it to close it at will when needed; maybe for a LFU connection cache in the future?
+                Socket socket = serverSocket.accept();
 
                 System.out.println("New client received: " + socket.getRemoteSocketAddress().toString());
 
@@ -38,7 +55,8 @@ public class Server {
                 clientThread.start();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("ERROR " + e.getMessage() + " Unable to accept the client connection!");
             }
         }
 

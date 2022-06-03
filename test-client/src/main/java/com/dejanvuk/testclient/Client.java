@@ -38,15 +38,16 @@ public class Client {
         while(true) {
             String userInput = scanner.nextLine();
 
-            if(userInput.equals("exit")) {
-                System.out.println("See ya!");
-                // TODO: do clean up
+            if(userInput.equals("quit")) {
+                System.out.println("Shutting down...");
                 try {
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.exit(1);
+
+                System.out.println("Shut down successfully!");
+                System.exit(0);
             }
 
             utilityCli.processCommand(userInput);
