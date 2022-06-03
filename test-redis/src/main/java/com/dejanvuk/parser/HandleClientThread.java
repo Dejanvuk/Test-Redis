@@ -98,15 +98,16 @@ public class HandleClientThread implements Runnable{
                 // 4th: write the message back to the client
                 sendMessage(response);
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("ERROR " + e.getMessage() + ": Client " + socket.getRemoteSocketAddress().toString() + " disconnected unexpectedly!");
                 try {
                     cleanUp();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             } catch (InvalidMsgException e) {
-                e.printStackTrace();
-                // TODO: Send client an error message
+                //e.printStackTrace();
+
                 String response = MakeCommandUtility.makeErrorMessage("ERROR:", e.getMessage());
                 try {
                     sendMessage(response);
