@@ -1,2 +1,5 @@
+com\dejanvuk\parser\Utility\Value.class
+com\dejanvuk\parser\Utility\MessageNodeList.class
 com\dejanvuk\parser\Server.class
+com\dejanvuk\parser\Utility\MessageNodeList$MessageNode.class
 com\dejanvuk\parser\HandleClientThread.class
