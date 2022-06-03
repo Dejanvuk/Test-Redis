@@ -23,7 +23,7 @@ public class Server {
             System.out.println("Waiting for incoming client connections on: " + serverSocket.getInetAddress() + ":" + port);
         } catch (IOException e) {
             System.out.println("Error could not listen on port " + port);
-            System.exit(1);
+            System.exit(-1);
         }
 
         // main loop, listen for incoming clients

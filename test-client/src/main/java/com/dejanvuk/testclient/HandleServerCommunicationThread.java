@@ -48,7 +48,9 @@ public class HandleServerCommunicationThread implements Runnable{
                 parser.readData(messages);
                 PrintUtility.printMessage(messages);
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("ERROR" + e.getMessage());
+                System.exit(-1);
             }
 
         }
