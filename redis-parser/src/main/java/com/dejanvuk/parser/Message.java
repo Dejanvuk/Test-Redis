@@ -3,6 +3,8 @@ package com.dejanvuk.parser;
 import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
 
+import java.util.Objects;
+
 /**
  * Class that holds the decoded message
  */
@@ -49,5 +51,18 @@ public class Message {
             Message message = new Message(this);
             return message;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return length == message.length && msgType == message.msgType && dataType == message.dataType && data.equals(message.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(msgType, dataType, length, data);
     }
 }
