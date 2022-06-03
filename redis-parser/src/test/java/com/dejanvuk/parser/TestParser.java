@@ -31,9 +31,8 @@ public class TestParser {
         // Client Read OK message from the server
         String _source1 = "*1\r\n+OK\r\n";
         InputStream d = new ByteArrayInputStream(_source1.getBytes(StandardCharsets.UTF_8));
-        DataInputStream in = new DataInputStream(d);
 
-        parser = new Parser(in);
+        parser = new Parser(new DataInputStream(d));
 
         List<Message> messages = new ArrayList<>();
         parser.readData(messages);
@@ -42,20 +41,27 @@ public class TestParser {
         correctMessages.add(new Message.MessageBuilder().setDataType(DataType.SIMPLE_STR).setData("OK").build());
         assertEquals(messages, correctMessages);
 
+
         String _source2 = "*2\r\n+OK\r\n:123456\r\n"; // Client Read OK with message response from Server, where the data is a single integer
-        in.reset();
         d = new ByteArrayInputStream(_source2.getBytes("UTF-8"));
         messages = new ArrayList<>();
+        parser.setIn(new DataInputStream(d));
         parser.readData(messages);
         // validate
+        correctMessages = new ArrayList<>();
+        correctMessages.add(new Message.MessageBuilder().setDataType(DataType.SIMPLE_STR).setData("OK").build());
+        correctMessages.add(new Message.MessageBuilder().setDataType(DataType.INTEGER).setData(123456).build());
+        assertEquals(messages, correctMessages);
 
 
         String _source3 = "*1\r\n-GET ERROR Key not found!\r\n";  // Client read ERROR message from the Server
-        in.reset();
-        d = new ByteArrayInputStream(_source2.getBytes("UTF-8"));
+        d = new ByteArrayInputStream(_source3.getBytes("UTF-8"));
         messages = new ArrayList<>();
+        parser.setIn(new DataInputStream(d));
         parser.readData(messages);
         // validate
+        correctMessages = new ArrayList<>();
+        correctMessages.add(new Message.MessageBuilder().setDataType(DataType.ERROR).setData("GET ERROR Key not found!").build());
 
     }
 

@@ -25,6 +25,14 @@ public class Parser {
         this.in = in;
     }
 
+    public DataInputStream getIn() {
+        return in;
+    }
+
+    public void setIn(DataInputStream in) {
+        this.in = in;
+    }
+
     public void readInteger(List<Message> messages) throws IOException {
         int number = readInteger();
         Integer data = number;
