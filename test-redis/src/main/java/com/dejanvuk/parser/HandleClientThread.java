@@ -99,7 +99,7 @@ public class HandleClientThread implements Runnable{
                 sendMessage(response);
             } catch (IOException e) {
                 //e.printStackTrace();
-                System.out.println("ERROR " + e.getMessage() + ": Client " + socket.getRemoteSocketAddress().toString() + " disconnected unexpectedly!");
+                System.out.println("Client" + socket.getRemoteSocketAddress().toString() +  "disconnected unexpectedly!");
                 try {
                     cleanUp();
                 } catch (IOException ex) {
