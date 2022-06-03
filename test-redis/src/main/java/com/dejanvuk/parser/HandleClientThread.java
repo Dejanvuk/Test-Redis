@@ -107,6 +107,12 @@ public class HandleClientThread implements Runnable{
             } catch (InvalidMsgException e) {
                 e.printStackTrace();
                 // TODO: Send client an error message
+                String response = MakeCommandUtility.makeErrorMessage("ERROR:", e.getMessage());
+                try {
+                    sendMessage(response);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 
