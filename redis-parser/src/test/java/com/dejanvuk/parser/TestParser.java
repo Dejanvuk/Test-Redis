@@ -155,7 +155,5 @@ public class TestParser {
         correctMessages.add(new Message.MessageBuilder().setDataType(DataType.BULK_STR).setData("oldKey").setLength(6).build());
         correctMessages.add(new Message.MessageBuilder().setDataType(DataType.BULK_STR).setData("newKey").setLength(6).build());
         assertEquals(messages, correctMessages);
-
-        System.out.println("blabla");
     }
 }
