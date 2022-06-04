@@ -99,7 +99,7 @@ public class HandleClientThread implements Runnable{
                 sendMessage(response);
             } catch (IOException e) {
                 //e.printStackTrace();
-                System.out.println("Client" + socket.getRemoteSocketAddress().toString() +  "disconnected unexpectedly!");
+                System.out.println("Client" + socket.getRemoteSocketAddress().toString() +  " disconnected unexpectedly!");
                 try {
                     cleanUp();
                 } catch (IOException ex) {
@@ -108,7 +108,7 @@ public class HandleClientThread implements Runnable{
             } catch (InvalidMsgException e) {
                 //e.printStackTrace();
 
-                String response = MakeCommandUtility.makeErrorMessage("ERROR:", e.getMessage());
+                String response = MakeCommandUtility.makeErrorMessage("ERROR: ", e.getMessage());
                 try {
                     sendMessage(response);
                 } catch (IOException ex) {

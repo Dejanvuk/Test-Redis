@@ -19,7 +19,8 @@ public class TestParser {
 
     @BeforeEach
     public void setup() {
-        System.out.println("=============== Start of Parser Tests Setup ===============\n");
+
+        //System.out.println("=============== Start of Parser Tests Setup ===============\n");
     }
 
     /**
@@ -27,6 +28,19 @@ public class TestParser {
      * Notice we don't use the Make methods to generate the String response as we want to isolate the readData function
      * @throws IOException
      */
+
+    @Test
+    public void readIntegerTest() throws IOException {
+        String _source1 = "123456\r\n";
+        InputStream d = new ByteArrayInputStream(_source1.getBytes(StandardCharsets.UTF_8));
+
+        parser = new Parser(new DataInputStream(d));
+
+        int nr = parser.readInteger();
+
+        assertEquals(nr, 123456);
+    }
+
     @Test
     public void readDataTestClient() throws IOException {
         // Client Read OK message from the server

@@ -147,7 +147,7 @@ public class Parser {
         }
     }
 
-    // TODO: Test this method
+    // TODO: Add support for negative numbers
     public int readInteger() throws IOException {
         int result = 0;
 

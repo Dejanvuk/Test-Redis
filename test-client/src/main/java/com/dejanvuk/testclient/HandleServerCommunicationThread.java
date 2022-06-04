@@ -49,7 +49,7 @@ public class HandleServerCommunicationThread implements Runnable{
                 PrintUtility.printMessage(messages);
             } catch (IOException e) {
                 //e.printStackTrace();
-                System.out.println("ERROR" + e.getMessage());
+                System.out.println("ERROR " + e.getMessage());
                 System.exit(-1);
             }
 

@@ -1,3 +1,5 @@
+package com.dejanvuk.parser;
+
 import com.dejanvuk.parser.MakeCommandUtility;
 import com.dejanvuk.parser.Parser;
 import org.junit.jupiter.api.BeforeEach;
