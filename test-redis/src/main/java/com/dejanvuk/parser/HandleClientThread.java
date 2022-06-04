@@ -9,13 +9,15 @@ import com.dejanvuk.parser.types.MsgType;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Thread for handling new clients
+ */
 public class HandleClientThread implements Runnable{
     private final Socket socket;
     private DataInputStream in = null;
@@ -116,30 +118,21 @@ public class HandleClientThread implements Runnable{
                 }
             }
         }
-
-
-        try {
-            cleanUp();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**
      * Cleans up the resources
+     * Not necessary as it's closed by OS, but it's good practice
      */
     public void cleanUp() throws IOException {
         if(in != null) in.close();
         if(out != null) out.close();
-
-        //if(socket != null) socket.close();// We don't close the socket in here, we will close it manually if needed after sending the message completely
     }
 
     /**
-     *
-     * @param messages
-     * @return a list containing the messages to be send back to the client
+     * Processes the SET message received
+     * @param messages : list of decoded messages
+     * @return an encoded string containing the messages to be sent back to the client
      * @throws InvalidMsgException
      */
     public String processSetMsg(List<Message> messages){
@@ -174,10 +167,10 @@ public class HandleClientThread implements Runnable{
     /**
      * SET,DELETE messages it will send back an empty OK
      * GET message will send back and OK alongside the encoded data as string
-     * @return
+     * @return an encoded string containing the messages to be sent back to the client
      *
      * Empty OK         OK with data
-     * S: *1\r\n        S: *{nr of messages}\r\n
+     * S: *1\r\n        S: *{nr of messages + 1}\r\n
      * S: +OK\r\n       S: +OK\r\n
      *                  S: {data}
      * {data} will be non-array, however later we will add support to parse complex nested arrays and data
@@ -206,9 +199,9 @@ public class HandleClientThread implements Runnable{
     }
 
     /**
-     *
-     * @param messages
-     * @return a list containing the messages to be send back to the client
+     * Processes the DELETE message received
+     * @param messages : list of decoded messages
+     * @return an encoded string containing the messages to be sent back to the client
      * @throws InvalidMsgException
      */
     public String processDeleteMsg(List<Message> messages){
@@ -234,6 +227,11 @@ public class HandleClientThread implements Runnable{
         }
     }
 
+    /**
+     * Processes the RENAME message received
+     * @param messages : list of decoded messages
+     * @return an encoded string containing the messages to be sent back to the client
+     */
     public String processRenameMsg(List<Message> messages){
         System.out.println("PROCESSING RENAME MESSAGE");
         /*
@@ -263,8 +261,8 @@ public class HandleClientThread implements Runnable{
     }
 
     /**
-     *
-     * @param response : to be send back to the client
+     * Sends the command to the Redis server
+     * @param response : the encoded command to be sent to the server
      */
     public void sendMessage(String response) throws IOException {
         out.write(response);

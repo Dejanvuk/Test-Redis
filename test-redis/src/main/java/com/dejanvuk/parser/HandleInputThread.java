@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Scanner;
 
+/**
+ * Thread handling the input from the command line
+ */
 public class HandleInputThread implements Runnable{
     Scanner scanner = new Scanner(System.in);
     ServerSocket serverSocket = null;

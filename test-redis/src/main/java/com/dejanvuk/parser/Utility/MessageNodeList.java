@@ -1,6 +1,5 @@
 package com.dejanvuk.parser.Utility;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +15,7 @@ public class MessageNodeList {
     private int capacity = 1; // default max capacity
     private MessageNode LRUNode = null;
     private MessageNode MRUNode = null;
-    Map<String, Value> db = null;
+    Map<String, Value> db = null; // we will use it to remove the LRU Value
 
     public MessageNodeList(){
         this.size = 0;
@@ -116,6 +115,10 @@ public class MessageNodeList {
         return MRUNode.key;
     }
 
+    /**
+     * Makes the received node the most recently used node
+     * @param node
+     */
     public void makeNodeMRU(MessageNode node) {
         if(node == MRUNode) return;
 
@@ -197,6 +200,10 @@ public class MessageNodeList {
         size++;
     }
 
+    /**
+     * Inserts new node at the tail
+     * @param key
+     */
     private void insertMessageLast(String key) {
         MessageNode node = new MessageNode(key);
 
@@ -212,6 +219,11 @@ public class MessageNodeList {
         this.size++;
     }
 
+    /**
+     * Inserts new node at the specified position
+     * @param key
+     * @param position : the index of the new node
+     */
     private void insertMessageAt(String key, int position) {
         MessageNode curr = head;
 
@@ -246,6 +258,9 @@ public class MessageNodeList {
         }
     }
 
+    /**
+     * Removes the head of the DLL
+     */
     private void removeFirstMessage() {
         if(head != null){
             head = head.next;
@@ -258,6 +273,9 @@ public class MessageNodeList {
         }
     }
 
+    /**
+     * Removes the tail of the DLL
+     */
     private void removeLastMessage() {
         if(tail != null){
             tail = tail.prev;
@@ -270,6 +288,10 @@ public class MessageNodeList {
         }
     }
 
+    /**
+     * Removes the message at the specified position
+     * @param position : the index of the message that will be removed
+     */
     private void removeMessageAt(int position) {
         if(position > size) {
             System.out.println("Error removing message: Index exceeds the list's size!");
@@ -306,8 +328,9 @@ public class MessageNodeList {
     }
 
     /**
+     * Removes the message with the key
      * first use the hashmap to check if the key exists
-     * @param key
+     * @param key : key of the message to be removed
      */
     private void removeMessageWithKey(String key) {
         MessageNode curr = head;
@@ -334,6 +357,9 @@ public class MessageNodeList {
         }
     }
 
+    /**
+     * Prints all the DLL key's
+     */
     public void printKeys() {
         MessageNode curr = head;
 

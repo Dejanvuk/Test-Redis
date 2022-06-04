@@ -3,8 +3,10 @@ package com.dejanvuk.parser;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
+/**
+ * Main Server class
+ */
 public class Server {
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
@@ -32,10 +34,12 @@ public class Server {
         while(true) {
             try {
                 // TODO: Encapsulate the socket and store it to close it at will when needed; maybe for a LFU connection cache in the future?
+                // 1: get a socket to the new client's connection
                 Socket socket = serverSocket.accept();
 
                 System.out.println("New client received: " + socket.getRemoteSocketAddress().toString());
 
+                // 2: start a separate thread to handle the new client
                 Thread clientThread = new Thread(new HandleClientThread(socket));
                 clientThread.start();
 
@@ -45,7 +49,7 @@ public class Server {
             }
         }
 
-        /*
+        /* Since it's only 1 socket, we don't really have to close it manually
         try {
             serverSocket.close();
         } catch (IOException e) {

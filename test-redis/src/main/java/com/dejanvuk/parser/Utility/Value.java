@@ -3,7 +3,9 @@ package com.dejanvuk.parser.Utility;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-// Wrapper for the Key's value, so we can add attributes to each key
+/**
+ * Wrapper for the Key's value, so we can add attributes to each key
+ */
 public class Value {
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     private List<Object> values = null;

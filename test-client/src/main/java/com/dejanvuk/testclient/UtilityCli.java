@@ -6,14 +6,10 @@ package com.dejanvuk.testclient;
     */
 
 import com.dejanvuk.parser.MakeCommandUtility;
-import com.dejanvuk.parser.Message;
-import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class UtilityCli {
@@ -160,7 +156,7 @@ public class UtilityCli {
 
     /**
      * Sends the command to the Redis server
-     * @param response
+     * @param response : the encoded command to be sent to the server
      */
     public void sendMessage(String response) {
         /*
@@ -173,10 +169,17 @@ public class UtilityCli {
             out.write(response);
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+
+            System.out.println("Failed sending the message to the server: " + e.getMessage());
         }
     }
 
+    /**
+     * Checks if the received command is among the accepted commands
+     * @param command
+     * @return : true if command is valid, otherwise false
+     */
     public boolean isCommandValid(String command) {
         for(MsgType msgType : MsgType.values()) {
             if(msgType.name().equals(command))

@@ -4,19 +4,15 @@ import com.dejanvuk.parser.exceptions.InvalidMsgException;
 import com.dejanvuk.parser.types.DataType;
 import com.dejanvuk.parser.types.MsgType;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /*
 https://redis.io/docs/reference/protocol-spec
 Client sends requests in an array
-Server also stores the requests in an array, even thoug there might be just one request
+Server also stores the requests in an array, even thug there might be just one request
 * */
 public class Parser {
     private DataInputStream in;
@@ -33,6 +29,11 @@ public class Parser {
         this.in = in;
     }
 
+    /**
+     * Reads the encoded integer from the socket input stream and stores it as a decoded message
+     * @param messages : adds the decoded message to the current decoded command list
+     * @throws IOException
+     */
     public void readInteger(List<Message> messages) throws IOException {
         int number = readInteger();
         Integer data = number;
@@ -40,6 +41,11 @@ public class Parser {
         messages.add(message);
     }
 
+    /**
+     * Reads the encoded simple string from the socket input stream and stores it as a decoded message
+     * @param messages : adds the decoded message to the current decoded command list
+     * @throws IOException
+     */
     public void readSimpleString(List<Message> messages) throws IOException {
         StringBuilder sb = new StringBuilder();
 
@@ -57,8 +63,9 @@ public class Parser {
     }
 
     /**
-     * Clients won't really send errors but whatever, usually only the server would send the client such a message
-     * @param messages
+     * Reads the encoded error string from the socket input stream and stores it as a decoded message
+     * Clients won't really send errors , usually only the server would send the client such a message
+     * @param messages : adds the decoded message to the current decoded command list
      * @throws IOException
      */
     public void readError(List<Message> messages) throws IOException {
@@ -77,6 +84,11 @@ public class Parser {
         messages.add(message);
     }
 
+    /**
+     * Reads the encoded bulk string from the socket input stream and stores it as a decoded message
+     * @param messages : adds the decoded message to the current decoded command list
+     * @throws IOException
+     */
     public void readBulkString(List<Message> messages) throws IOException{
         int length = readInteger(); // read the length of the bulk string
         char[] str = new char[length];
@@ -105,6 +117,11 @@ public class Parser {
         messages.add(message);
     }
 
+    /**
+     * Reads the encoded array from the socket input stream and stores it as a decoded message
+     * @param messages : adds the decoded message to the current decoded command list
+     * @throws IOException
+     */
     public void readArray(List<Message> messages) throws IOException {
         int length = readInteger(); // read the length of the array
         in.skipBytes(2); // skip CLRF
@@ -113,6 +130,11 @@ public class Parser {
         messages.add(message);
     }
 
+    /**
+     * Reads the encoded incoming messages from the socket input stream and stores them in the specified list
+     * @param messages : the list where the messages will be stored into
+     * @throws IOException
+     */
     public void readData(List<Message> messages) throws IOException {
         char dataType = (char) in.readUnsignedByte();
 
@@ -148,6 +170,11 @@ public class Parser {
     }
 
     // TODO: Add support for negative numbers
+    /**
+     * Reads the encoded integer from the socket input
+     * @return : the integer read
+     * @throws IOException
+     */
     public int readInteger() throws IOException {
         int result = 0;
 

@@ -3,7 +3,6 @@ package com.dejanvuk.parser;
 import com.dejanvuk.parser.types.DataType;
 
 import java.util.List;
-import java.util.Map;
 
 public class PrintUtility {
     /* ====================
@@ -12,8 +11,9 @@ public class PrintUtility {
     */
 
     /**
-     * Print the full command received
-     * @param messages
+     * Print the list of messages decocoded
+     * The server will also print the command, which is the first message (after the array message was discarded before creating the list)
+     * @param messages : the list of decoded messages
      */
     public static void printMessage(List<Message> messages) {
         StringBuilder sb = new StringBuilder();
@@ -22,7 +22,7 @@ public class PrintUtility {
         for(int i = 0; i < messages.size(); i++) { // 0 because first * is already skipped in readData
             Message message = messages.get(i);
 
-            if(message.msgType != null) {
+            if(message.msgType != null) { // only servers can receive commands
                 sb.append("Command received: " + message.msgType.toString() + "(");
                 isMsg = true;
             }

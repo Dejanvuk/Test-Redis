@@ -1,8 +1,5 @@
 package com.dejanvuk.testclient;
 
-import com.dejanvuk.parser.Parser;
-
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -34,7 +31,6 @@ public class Client {
         }
 
         // read client commands until 'exit' is detected
-
         while(true) {
             String userInput = scanner.nextLine();
 
