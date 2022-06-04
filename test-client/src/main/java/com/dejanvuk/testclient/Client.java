@@ -13,7 +13,11 @@ public class Client {
         UtilityCli utilityCli = null;
 
         try {
-            socket = new Socket("localhost", 6379);
+            String host = System.getenv("REDIS_HOST") != null ? System.getenv("REDIS_HOST") : "localhost";
+            int port  = System.getenv("REDIS_PORT") != null ? Integer. parseInt(System.getenv("REDIS_PORT")) : 6379;
+            System.out.println("Attempting to connect to " + host + ":" + port);
+            socket = new Socket(host, 6379);
+            System.out.println("Succes!");
             // make a new thread to read the input from the server
             Thread serverThread = new Thread(new HandleServerCommunicationThread(socket));
             serverThread.start();

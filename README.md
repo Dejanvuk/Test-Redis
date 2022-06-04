@@ -11,6 +11,15 @@ ___
 * LRU support by default
 * Parser library to decode and encode commands
 * Dockerized 
+
+## How to run
+
+Create the network: docker network create redis-network
+
+Server: docker run --network-alias redisserver --network redis-network -p 6379:6379 -it redisserver
+
+Client: docker run --network redis-network -it redisclient
+
 ## Running Tests
 
 ```

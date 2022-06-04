@@ -10,7 +10,7 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
-        final int port = 6379; // TODO: custom port read from file or system env
+        final int port = System.getenv("REDIS_PORT") != null ? Integer. parseInt(System.getenv("REDIS_PORT")) : 6379;
 
         System.out.println("========================" +
                 "" +
