@@ -38,7 +38,7 @@ public class UtilityCli {
         // TODO: Add support for array
 
         line = line.replaceAll("\\s","");// Remove white lines , just to be sure
-        // TODO: Basic paranthesis check
+        // TODO: Check for paranthesis
         StringBuilder commandBuilder = new StringBuilder(); String command = "";
         StringBuilder keyBuilder = new StringBuilder(); String key = "";
         StringBuilder valueBuilder = new StringBuilder();

@@ -7,7 +7,19 @@
 
 ___
 ## Current features:
-* Support for GET,SET,DELETE,RENAME commands
+* Support for GET,SET,DELETE,RENAME commands using the CLI
+* LRU support by default
+* Parser library to decode and encode commands
+* Dockerized 
+## Running Tests
+
+```
+mvn test
+```
+Test Coverage:
+1. Parser ~78%
+2. CLI 0%
+3. Server 0%
 
 # The protocol and a couple of message examples, by default UTF-8
 [Redis Protocol](https://redis.io/docs/reference/protocol-spec/)
@@ -38,8 +50,7 @@ S: *{nr of messages}\r\n
 S: +OK\r\n  
 S: {data}   
 
-{data} will be non-array, however later we will add support to parse complex nested arrays and data<br /> 
-if {data} is array, get each message from the array <br />
+{data} will be non-array or an array or a nested array <br />
 {nr of messages} is 2 for non-array, and for array is the array size + 1 to account for the OK simple string<br />        
 
 #### Client requests for **GET("abcd")**
@@ -93,3 +104,10 @@ ___
 - [ ] Add serializer/deserializer to persist data on disk if needed
 - [ ] Add support for multiple commands aka pipelining
 - [ ] Port the sdk interface to JS/TS and default to HTTP if websockets are not enabled in the browser
+
+## Contributing
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request

@@ -45,20 +45,4 @@ public class PrintUtility {
 
         System.out.println(sb.toString());
     }
-
-    // TODO: Not yet needed :)
-    /**
-     * Prints the whole database
-     */
-    public static void printDatabase(Map<String, List<Message>> db) {
-
-    }
-
-    /**
-     * Prints the value at key from database
-     * @param key
-     */
-    public static void printDbEntry( Map<String, List<Message>> db, String key) {
-
-    }
 }

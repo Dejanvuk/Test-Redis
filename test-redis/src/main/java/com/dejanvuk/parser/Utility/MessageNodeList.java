@@ -162,7 +162,7 @@ public class MessageNodeList {
     }
 
     /**
-     * TODO: Remove this, we will use the hash map to test for existence of the key
+     * Worthless method for LRU, we will use the hash map to test for existence of the key
      * @param key
      * @return
      */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="0" failures="0" name="UtilityCliTest" time="0" errors="0" skipped="0">
+<testsuite tests="0" failures="0" name="com.dejanvuk.parser.TestMakeCommandUtility" time="0" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.13+8-LTS"/>
@@ -8,16 +8,16 @@
     <property name="maven.multiModuleProjectDirectory" value="C:\Users\a-dvukovic\Desktop\Projects\Redis"/>
     <property name="java.vm.vendor" value="Azul Systems, Inc."/>
     <property name="java.vendor.url" value="http://www.azul.com/"/>
-    <property name="path.separator" value=";"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=";"/>
     <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="user.script" value=""/>
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-    <property name="user.script" value=""/>
-    <property name="sun.os.patch.level" value=""/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="user.dir" value="C:\Users\a-dvukovic\Desktop\Projects\Redis"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
-    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="java.runtime.version" value="11.0.13+8-LTS"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
     <property name="os.arch" value="amd64"/>
@@ -42,8 +42,8 @@
     <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
     <property name="file.encoding" value="Cp1252"/>
     <property name="java.specification.version" value="11"/>
-    <property name="java.class.path" value="C:\Maven\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="user.name" value="a-dvukovic"/>
+    <property name="java.class.path" value="C:\Maven\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher test"/>
@@ -59,8 +59,8 @@
     <property name="file.separator" value="\"/>
     <property name="java.version.date" value="2021-10-19"/>
     <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
-    <property name="sun.cpu.endian" value="little"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.endian" value="little"/>
     <property name="java.vendor.version" value="Zulu11.52+13-CA"/>
     <property name="sun.stdout.encoding" value="cp437"/>
     <property name="sun.desktop" value="windows"/>
