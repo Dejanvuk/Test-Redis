@@ -3,7 +3,7 @@ package com.dejanvuk.parser;
 import java.util.List;
 
 /**
- * Utility class to make commands
+ * Utility class to make commands.
  */
 public class MakeCommandUtility {
     /**

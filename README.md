@@ -14,7 +14,7 @@ ___
 
 ## How to run
 
-You can change the REDIS_PORT and REDIS_HOST(only for the server) system environment variables, otherwise the defaults are '6379' and 'localhost'
+You can change the REDIS_PORT and REDIS_HOST(only for the client) system environment variables, otherwise the defaults are '6379' and 'localhost'
 
 Create the network: docker network create redis-network
 
@@ -105,6 +105,12 @@ S: -{ERROR} {exception as bulk string}\r\n
 
 Needless to say, the Redis app uses the 3rd way which is the most efficient in this case.
 ___
+## SHORT TERM TO-DO's:
+- [ ] Add Lombok to the models
+- [ ] Change the packet name '.parser' in the server 
+- [ ] If key was already present when using SET, send an OK message saying the key was already present back
+- [ ] Add 'TOP' command and 'TOP n most recently used & least recently used' command 
+
 ## EXTRA TO-DO's:
 - [x] Create the CLI
 - [x] Add support for arrays with different data types, for example arrays of strings and integers (Partial, only parser support is missing)
